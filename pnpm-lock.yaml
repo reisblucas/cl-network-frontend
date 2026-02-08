@@ -44,6 +44,9 @@ importers:
       react-hook-form:
         specifier: ^7.71.1
         version: 7.71.1(react@19.2.4)
+      react-query-auth:
+        specifier: ^2.4.3
+        version: 2.4.3(@tanstack/react-query@5.90.20(react@19.2.4))(react@19.2.4)
       react-router:
         specifier: ^7.13.0
         version: 7.13.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -2754,6 +2757,13 @@ packages:
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
+
+  react-query-auth@2.4.3:
+    resolution: {integrity: sha512-sSDX4OZSyBTvTOItiWEH/SsTfKg7AEAc7qOL1qsxx+vIx5s82VeUyj4W1vNlHY9nFeU1accm1hRW1FVF2TzaiA==}
+    engines: {node: '>=20.0.0'}
+    peerDependencies:
+      '@tanstack/react-query': '>=4.24.6'
+      react: '>=16.8.0'
 
   react-refresh@0.18.0:
     resolution: {integrity: sha512-QgT5//D3jfjJb6Gsjxv0Slpj23ip+HtOpnNgnb2S5zU3CB26G/IDPGoy4RJB42wzFE46DRsstbW6tKHoKbhAxw==}
@@ -5931,6 +5941,11 @@ snapshots:
 
   react-hook-form@7.71.1(react@19.2.4):
     dependencies:
+      react: 19.2.4
+
+  react-query-auth@2.4.3(@tanstack/react-query@5.90.20(react@19.2.4))(react@19.2.4):
+    dependencies:
+      '@tanstack/react-query': 5.90.20(react@19.2.4)
       react: 19.2.4
 
   react-refresh@0.18.0: {}

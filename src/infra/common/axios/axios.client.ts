@@ -1,5 +1,5 @@
 import axios, { type InternalAxiosRequestConfig } from 'axios'
-import { env } from '../env'
+import { env } from '../../env'
 import { GlobalNavigate } from '../react-router/utils/useGlobalNavigation'
 
 export const api = axios.create({
@@ -17,9 +17,7 @@ function authRequestInterceptor(config: InternalAxiosRequestConfig): InternalAxi
 
 api.interceptors.request.use(authRequestInterceptor)
 api.interceptors.response.use(
-  (response) => {
-    return response.data
-  },
+  (response) => response,
   (error) => {
     const message = error.response?.data?.message || error.message || 'An unexpected error occurred'
     // TODO: add toast later
