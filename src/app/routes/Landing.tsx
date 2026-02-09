@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button'
 import { useUser } from '@/auth'
 import { paths } from '@/infra/paths'
 import { useNavigate } from 'react-router'
+import { Head } from '@/infra/common/seo'
 
 export function LandingRoute() {
   const navigate = useNavigate()
