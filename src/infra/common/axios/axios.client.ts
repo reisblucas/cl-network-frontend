@@ -1,6 +1,6 @@
 import axios, { type InternalAxiosRequestConfig } from 'axios'
 import { env } from '../../env'
-import { GlobalNavigate } from '../react-router/utils/useGlobalNavigation'
+import { GlobalNavigate } from '../react-router/utils/'
 
 export const api = axios.create({
   baseURL: env.API_URL

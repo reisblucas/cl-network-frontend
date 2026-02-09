@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router'
 
-export const ErrorBoundary = () => {
+export const AppRootErrorBoundary = () => {
   return <div>Something went wrong</div>
 }
 

@@ -1,14 +1,13 @@
-import { ProtectedRoute } from '@/infra/common/auth/ProtectedRoute'
+import { ProtectedRoute } from '@/auth/ProtectedRoute'
 import { paths } from '@/infra/paths'
 import { QueryClient, useQueryClient } from '@tanstack/react-query'
 import { createBrowserRouter, RouterProvider } from 'react-router'
-import { AppRoot } from './routes/app/root'
+import { AppRoot, AppRootErrorBoundary } from './routes/app/root'
 import { useMemo } from 'react'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const convert = (queryClient: QueryClient) => (mod: any) => {
   const { clientLoader, clientAction, default: DefaultComponent, Page, ...rest } = mod
-
   // allowed Default Export and Named Export
   const Component = DefaultComponent ?? Page
 
@@ -24,7 +23,7 @@ export const createAppRouter = (queryClient: QueryClient) =>
   createBrowserRouter([
     {
       path: paths.home.path,
-      lazy: () => import('./routes/landing').then(convert(queryClient))
+      lazy: () => import('./routes/Landing').then(convert(queryClient))
     },
     // {
     //   path: paths.auth.login.path,
@@ -36,6 +35,7 @@ export const createAppRouter = (queryClient: QueryClient) =>
     // },
     {
       path: paths.app.root.path,
+      ErrorBoundary: AppRootErrorBoundary,
       element: (
         <ProtectedRoute>
           <AppRoot />
@@ -44,7 +44,7 @@ export const createAppRouter = (queryClient: QueryClient) =>
     },
     {
       path: '*',
-      lazy: () => import('./routes/not-found').then(convert(queryClient))
+      lazy: () => import('./routes/NotFound').then(convert(queryClient))
     }
   ])
 

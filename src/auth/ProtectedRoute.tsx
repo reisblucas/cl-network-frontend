@@ -1,6 +1,6 @@
 import { configureAuth } from 'react-query-auth'
 import z from 'zod'
-import { api } from '../axios/axios.client'
+import { api } from '../infra/common/axios/axios.client'
 import { Navigate, useLocation } from 'react-router'
 import { paths } from '@/infra/paths'
 import type { AuthResponse, UserResponse } from './auth.contract'

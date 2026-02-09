@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { useUser } from '@/infra/common/auth/ProtectedRoute'
+import { useUser } from '@/auth'
 import { paths } from '@/infra/paths'
 import { useNavigate } from 'react-router'
 
