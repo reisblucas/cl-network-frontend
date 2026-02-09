@@ -1,7 +1,8 @@
 import type { Entity } from '@/infra/__types__/api.type'
 
-export type Roles = 'ADMIN' | 'USER'
+export type RoleTypes = 'ADMIN' | 'USER'
 
+// base will be usable in Registration Api
 export type UserRegister = {
   first_name: string
   last_name: string
@@ -10,9 +11,15 @@ export type UserRegister = {
   bio: string
 }
 
-export type UserResponse = Entity<UserRegister & { role: Roles }>
+export type User = Entity<UserRegister & { role: RoleTypes }>
 
 export type AuthResponse = {
-  user: UserResponse
+  user: User
   jwt: string
 }
+
+export type Comment = Entity<{
+  body: string
+  discussionId: string
+  author: User
+}>
