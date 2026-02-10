@@ -1,4 +1,4 @@
-import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Head } from '@/infra/common/seo'
 import { useNavigate } from 'react-router'
 import { useForm } from 'react-hook-form'
@@ -9,9 +9,14 @@ import { Flex } from '@/components/common'
 import { paths } from '@/infra/paths'
 import { Label } from '@/components/ui/label'
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
+import { Eye, EyeOffIcon, Lock } from 'lucide-react'
+import { useState } from 'react'
+import { Field, FieldLabel } from '@/components/ui/field'
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
 
 export function LoginRoute() {
   const navigate = useNavigate()
+  const [showPassword, setShowPassword] = useState(false)
 
   const {
     register,
@@ -25,6 +30,12 @@ export function LoginRoute() {
     }
   })
 
+  const isValidForm = Boolean(errors.login?.message || errors.password?.message)
+
+  const togglePassword = () => {
+    setShowPassword(!showPassword)
+  }
+
   return (
     <>
       <Head title="Login" />
@@ -32,8 +43,12 @@ export function LoginRoute() {
       <Flex className="justify-center items-center h-screen">
         <Card className="w-full max-w-sm">
           <CardHeader className="relative">
-            <CardTitle>Login to your account</CardTitle>
-            <CardDescription>Enter your username or email below to login to your account</CardDescription>
+            <CardTitle className="text-xl text-center">
+              <Flex className="w-full justify-center gap-2">
+                <Lock />
+                Account Login
+              </Flex>
+            </CardTitle>
           </CardHeader>
 
           <CardContent>
@@ -45,20 +60,26 @@ export function LoginRoute() {
                 </Flex>
                 <Input id="login" placeholder="Username or email" {...register('login')} />
 
-                <Flex className="justify-between">
-                  <Label htmlFor="password">Password</Label>
-                  {errors.password && (
-                    <span className="text-xs inline-block text-red-500">{errors.password.message}</span>
-                  )}
-                </Flex>
+                <Field>
+                  <Flex className="justify-between">
+                    <FieldLabel htmlFor="password">Password</FieldLabel>
+                    {errors.password && (
+                      <span className="text-xs inline-block text-red-500">{errors.password.message}</span>
+                    )}
+                  </Flex>
+                  <InputGroup onClick={togglePassword}>
+                    <InputGroupInput
+                      id="password"
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="Password"
+                      {...register('password', { required: true })}
+                      className="relative"
+                    />
+                    <InputGroupAddon align="inline-end">{showPassword ? <EyeOffIcon /> : <Eye />}</InputGroupAddon>
+                  </InputGroup>
+                </Field>
 
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="Password"
-                  {...register('password', { required: true })}
-                />
-                <Button variant="outline" type="submit">
+                <Button variant="outline" type="submit" disabled={isValidForm}>
                   Login
                 </Button>
               </Flex>
