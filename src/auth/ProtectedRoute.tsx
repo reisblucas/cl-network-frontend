@@ -3,10 +3,10 @@ import z from 'zod'
 import { api } from '../infra/common/axios/axios.client'
 import { Navigate, useLocation } from 'react-router'
 import { paths } from '@/infra/paths'
-import type { AuthResponse, UserResponse } from './auth.contract'
+import type { AuthResponse, User } from './auth.contract'
 
 // regex
-const NOT_SPECIAL_CHARACTER_REGEX = /[^A-Za-z0-9\s]/
+const HAS_SPECIAL_CHARACTER_REGEX = /[^A-Za-z0-9\s]/
 // end regex
 
 // auth.dto.ts
@@ -19,7 +19,7 @@ export const BASE_PASSWORD_SCHEMA = z.string().min(PASSWORD.min, 'Password is re
 export const BASE_USERNAME_SCHEMA = z
   .string()
   .min(3, 'Username is required')
-  .regex(NOT_SPECIAL_CHARACTER_REGEX, 'Special characters are not allowed')
+  .regex(HAS_SPECIAL_CHARACTER_REGEX, 'Special characters are not allowed')
 
 // Credential schema is the same between OWNER and CANDIDATE
 const registerPasswordSchema = z
@@ -36,7 +36,7 @@ const registerPasswordSchema = z
   .regex(/\d/, {
     error: 'At least 1 digit character is required'
   })
-  .regex(NOT_SPECIAL_CHARACTER_REGEX, {
+  .regex(HAS_SPECIAL_CHARACTER_REGEX, {
     error: 'At least 1 special character is required'
   })
   .nonempty()
@@ -50,29 +50,31 @@ export const loginInputSchema = z
   .strict()
   .superRefine((data, ctx) => {
     const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.login)
-
     if (!isEmail) {
       // validate
-      const isValidUsername = NOT_SPECIAL_CHARACTER_REGEX.test(data.login)
-      if (!isValidUsername) {
+      const isInvalidUsername = HAS_SPECIAL_CHARACTER_REGEX.test(data.login) // if not have  special character, it is valid
+
+      if (isInvalidUsername) {
         ctx.addIssue({
           path: ['login'],
           message: 'Invalid username',
           code: 'custom'
         })
+
         return
+      }
+    } else {
+      const emailResult = BASE_EMAIL_SCHEMA.safeParse(data.login)
+      if (!emailResult.success) {
+        ctx.addIssue({
+          path: ['login'],
+          message: 'Invalid email',
+          code: 'custom'
+        })
       }
     }
 
     // validate email
-    const emailResult = BASE_EMAIL_SCHEMA.safeParse(data.login)
-    if (!emailResult.success) {
-      ctx.addIssue({
-        path: ['login'],
-        message: 'Invalid email',
-        code: 'custom'
-      })
-    }
   })
 export type LoginInput = z.infer<typeof loginInputSchema>
 
@@ -104,7 +106,7 @@ export const registerWithEmailAndPassword = async (data: RegisterInput): Promise
   return api.post('/auth/register', data)
 }
 
-export const getUser = async (): Promise<UserResponse> => {
+export const getUser = async (): Promise<User> => {
   return api.get('/auth/me')
 }
 

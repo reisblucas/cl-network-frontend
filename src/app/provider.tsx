@@ -6,6 +6,7 @@ import React, { useState } from 'react'
 import { MainErrorFallback } from '@/components/errors/main'
 import { AuthLoader } from '@/auth'
 import { Spinner } from '@/components/ui/spinner'
+import { ThemeProvider } from '@/components/theme.provider'
 
 type AppProviderProps = {
   children: React.ReactNode
@@ -25,15 +26,17 @@ export function AppProvider({ children }: AppProviderProps) {
         <QueryClientProvider client={queryClient}>
           {import.meta.env.DEV && <ReactQueryDevtools />}
           {/* Notifications */}
-          <AuthLoader
-            renderLoading={() => (
-              <div className="flex h-screen w-screen items-center justify-center">
-                <Spinner className="size-3" />
-              </div>
-            )}
-          >
-            {children}
-          </AuthLoader>
+          <ThemeProvider>
+            <AuthLoader
+              renderLoading={() => (
+                <div className="flex h-screen w-screen items-center justify-center">
+                  <Spinner className="size-3" />
+                </div>
+              )}
+            >
+              {children}
+            </AuthLoader>
+          </ThemeProvider>
         </QueryClientProvider>
       </ErrorBoundary>
     </React.Suspense>
