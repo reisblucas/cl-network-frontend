@@ -4,6 +4,10 @@ import { QueryClient, useQueryClient } from '@tanstack/react-query'
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import { AppRoot, AppRootErrorBoundary } from './routes/app/root'
 import { useMemo } from 'react'
+import { LandingRoute } from './routes/landing.route'
+import { NotFoundRoute } from './routes/not-found.route'
+import { LoginRoute } from './routes/auth/login.route'
+import { PublicLayout } from '@/components/layouts'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const convert = (queryClient: QueryClient) => (mod: any) => {
@@ -23,15 +27,21 @@ export const createAppRouter = (queryClient: QueryClient) =>
   createBrowserRouter([
     {
       path: paths.home.path,
-      lazy: () => import('./routes/Landing').then(convert(queryClient))
+      element: (
+        <PublicLayout title="Landing">
+          <LandingRoute />
+        </PublicLayout>
+      ),
+      lazy: () => import('./routes/landing.route').then(convert(queryClient))
+    },
+    {
+      path: paths.auth.login.path,
+      lazy: () => import('./routes/auth/login.route').then(convert(queryClient)),
+      element: <LoginRoute />
     },
     // {
-    //   path: paths.auth.login.path,
-    //   lazy: () => import('./routes/auth/login').then(convert(queryClient))
-    // },
-    // {
     //   path: paths.auth.register.path,
-    //   lazy: () => import('./routes/auth/register').then(convert(queryClient))
+    //   lazy: () => import('./routes/auth/register.route').then(convert(queryClient))
     // },
     {
       path: paths.app.root.path,
@@ -44,7 +54,8 @@ export const createAppRouter = (queryClient: QueryClient) =>
     },
     {
       path: '*',
-      lazy: () => import('./routes/NotFound').then(convert(queryClient))
+      element: <NotFoundRoute />,
+      lazy: () => import('./routes/not-found.route').then(convert(queryClient))
     }
   ])
 

@@ -19,7 +19,6 @@ export function LandingRoute() {
   return (
     <>
       <Head description="Welcome to CodeLeap network!" />
-
       <div>
         <h2>Engage with our community</h2>
 
