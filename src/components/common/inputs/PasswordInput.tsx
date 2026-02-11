@@ -2,22 +2,27 @@ import { Field, FieldLabel } from '@/components/ui/field'
 import { Flex } from '../Flex'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
 import { useState } from 'react'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, type FieldValues, type Path } from 'react-hook-form'
 import { Eye, EyeOffIcon } from 'lucide-react'
-import type { LoginInput } from '@/auth'
 import { cn } from '@/lib/utils'
 
-interface PasswordInputProps {
-  id?: string
+interface PasswordInputProps<T extends FieldValues> {
+  id?: Path<T>
+  label?: string
   placeholder?: string
   className?: React.HTMLAttributes<HTMLInputElement>['className']
 }
 
-export function PasswordInput({ id = 'password', placeholder = 'Test.123', className }: PasswordInputProps) {
+export function PasswordInput<T extends FieldValues>({
+  id = 'password',
+  label = 'Password',
+  placeholder = 'Type your password here',
+  className
+}: PasswordInputProps<T>) {
   const {
     register,
     formState: { errors }
-  } = useFormContext<LoginInput>()
+  } = useFormContext<T>()
 
   const [showPassword, setShowPassword] = useState(false)
   const togglePassword = () => {
@@ -27,18 +32,20 @@ export function PasswordInput({ id = 'password', placeholder = 'Test.123', class
   return (
     <Field>
       <Flex className="justify-between">
-        <FieldLabel htmlFor={id}>Password</FieldLabel>
-        {errors.password && <span className="text-xs inline-block text-red-500">{errors.password.message}</span>}
+        <FieldLabel htmlFor={id}>{label}</FieldLabel>
+        {errors[id] && <span className="text-xs inline-block text-red-500">{errors[id]?.message?.toString()}</span>}
       </Flex>
-      <InputGroup onClick={togglePassword}>
+      <InputGroup>
         <InputGroupInput
           id={id}
           type={showPassword ? 'text' : 'password'}
           placeholder={placeholder}
-          {...register('password', { required: true })}
-          className={cn('relative', className)}
+          {...register(id, { required: true })}
+          className={cn('relative placeholder-shown:italic', className)}
         />
-        <InputGroupAddon align="inline-end">{showPassword ? <EyeOffIcon /> : <Eye />}</InputGroupAddon>
+        <InputGroupAddon align="inline-end" onClick={togglePassword}>
+          {showPassword ? <EyeOffIcon /> : <Eye />}
+        </InputGroupAddon>
       </InputGroup>
     </Field>
   )

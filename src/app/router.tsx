@@ -8,6 +8,7 @@ import { LandingRoute } from './routes/landing.route'
 import { NotFoundRoute } from './routes/not-found.route'
 import { LoginRoute } from './routes/auth/login.route'
 import { PublicLayout } from '@/components/layouts'
+import { RegisterRoute } from './routes/auth/register.route'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const convert = (queryClient: QueryClient) => (mod: any) => {
@@ -39,10 +40,11 @@ export const createAppRouter = (queryClient: QueryClient) =>
       lazy: () => import('./routes/auth/login.route').then(convert(queryClient)),
       element: <LoginRoute />
     },
-    // {
-    //   path: paths.auth.register.path,
-    //   lazy: () => import('./routes/auth/register.route').then(convert(queryClient))
-    // },
+    {
+      path: paths.auth.register.path,
+      lazy: () => import('./routes/auth/register.route').then(convert(queryClient)),
+      element: <RegisterRoute />
+    },
     {
       path: paths.app.root.path,
       ErrorBoundary: AppRootErrorBoundary,

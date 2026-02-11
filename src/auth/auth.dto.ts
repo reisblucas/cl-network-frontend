@@ -1,19 +1,22 @@
+import {
+  BIOGRAPHY,
+  FIRST_NAME,
+  HAS_SPECIAL_CHARACTER_REGEX,
+  LAST_NAME,
+  PASSWORD,
+  SPECIAL_CHARACTERS_NOT_ALLOWED
+} from '@/domain/validation'
 import z from 'zod'
 
-// regex
-const HAS_SPECIAL_CHARACTER_REGEX = /[^A-Za-z0-9\s]/
-// end regex
-
-const PASSWORD = {
-  min: 8,
-  max: 128
-}
 export const BASE_EMAIL_SCHEMA = z.email('Invalid email').nonempty().nonoptional('Email is required')
 export const BASE_PASSWORD_SCHEMA = z.string().min(PASSWORD.min, 'Password is required')
 export const BASE_USERNAME_SCHEMA = z
   .string()
   .min(3, 'Username is required')
-  .regex(HAS_SPECIAL_CHARACTER_REGEX, 'Special characters are not allowed')
+  .refine(
+    (data) => !SPECIAL_CHARACTERS_NOT_ALLOWED.test(data),
+    'Username can only contain letters, numbers, and underscores'
+  )
 
 // Credential schema is the same between OWNER and CANDIDATE
 const registerPasswordSchema = z
@@ -76,10 +79,21 @@ export const registerInputSchema = z
   .object({
     email: BASE_EMAIL_SCHEMA,
     password: registerPasswordSchema,
+    password_confirmation: z.string().max(PASSWORD.max, 'Password must be less than 128 characters').nonoptional(),
     username: BASE_USERNAME_SCHEMA,
-    first_name: z.string().min(1, 'First name is required'),
-    last_name: z.string().min(1, 'First name is required'),
-    bio: z.string().min(1, 'Bio is required')
+    first_name: z
+      .string()
+      .min(FIRST_NAME.min, 'First name is required')
+      .max(FIRST_NAME.max, `First name must be less than ${FIRST_NAME.max} characters`),
+    last_name: z
+      .string()
+      .min(LAST_NAME.min, 'First name is required')
+      .max(LAST_NAME.max, `Last name must be less than ${LAST_NAME.max} characters`),
+    bio: z.string().trim().max(BIOGRAPHY.max, `Bio must be less than ${BIOGRAPHY.max} characters`).optional()
   })
   .strict()
+  .refine((data) => data.password === data.password_confirmation, {
+    message: 'Passwords do not match',
+    path: ['password_confirmation']
+  })
 export type RegisterInput = z.infer<typeof registerInputSchema>

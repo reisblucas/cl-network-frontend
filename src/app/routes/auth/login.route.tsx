@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label'
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { Lock } from 'lucide-react'
 import { PasswordInput } from '@/components/common/inputs'
+import { Spinner } from '@/components/ui/spinner'
 
 export function LoginRoute() {
   const navigate = useNavigate()
@@ -60,10 +61,10 @@ export function LoginRoute() {
                   </Flex>
                   <Input id="login" placeholder="Username or email" {...register('login')} />
 
-                  <PasswordInput />
+                  <PasswordInput<LoginInput> />
 
-                  <Button variant="outline" type="submit" disabled={isValidForm}>
-                    Login
+                  <Button variant="outline" type="submit" disabled={loginMutation.isPending || isValidForm}>
+                    {loginMutation.isPending ? <Spinner /> : 'Login'}
                   </Button>
                 </Flex>
               </form>
