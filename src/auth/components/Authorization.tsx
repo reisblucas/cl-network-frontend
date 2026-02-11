@@ -1,20 +1,6 @@
 import React from 'react'
-import type { Comment, RoleTypes, User } from '../auth.contract'
-import { useUser } from '../auth.config'
-
-export const POLICIES = {
-  'comment:delete': (user: User, comment: Comment) => {
-    if (user.role === 'ADMIN') {
-      return true
-    }
-
-    if (user.role === 'USER' && comment.author?.id === user.id) {
-      return true
-    }
-
-    return false
-  }
-}
+import type { RoleTypes } from '../auth.contract'
+import { useAuthorization } from '../auth.hooks'
 
 type AuthorizationProps = {
   forbiddenFallback?: React.ReactNode
@@ -29,29 +15,6 @@ type AuthorizationProps = {
       policyCheck?: boolean
     }
 )
-
-// hook
-export const useAuthorization = () => {
-  const user = useUser()
-
-  if (!user.data) {
-    throw Error('User does not exists!')
-  }
-
-  const checkAccess = React.useCallback(
-    ({ allowedRoles }: { allowedRoles: RoleTypes[] }) => {
-      if (allowedRoles && allowedRoles.length > 0 && user.data) {
-        return allowedRoles?.includes(user.data.role)
-      }
-
-      return false
-    },
-    [user.data]
-  )
-
-  return { checkAccess, role: user.data.role }
-}
-// end hook
 
 export const Authorization = ({
   policyCheck,

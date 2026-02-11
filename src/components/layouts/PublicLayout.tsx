@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 import { Flex } from '../common'
 import { paths } from '@/infra/paths'
 import { Button } from '../ui/button'
@@ -7,11 +7,6 @@ import { ArrowLeftCircle } from 'lucide-react'
 type PublicLayoutProps = {
   children: React.ReactNode
   title: string
-}
-
-const navlinks = {
-  home: '/',
-  login: '/login'
 }
 
 export function PublicLayout({ children }: PublicLayoutProps) {

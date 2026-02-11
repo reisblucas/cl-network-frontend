@@ -6,7 +6,7 @@ import React, { useState } from 'react'
 import { MainErrorFallback } from '@/components/errors/main'
 import { AuthLoader } from '@/auth'
 import { Spinner } from '@/components/ui/spinner'
-import { ThemeProvider } from '@/components/theme.provider'
+import { ThemeProvider } from '@/providers'
 
 type AppProviderProps = {
   children: React.ReactNode
