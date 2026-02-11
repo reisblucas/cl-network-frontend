@@ -1,6 +1,6 @@
 import React from 'react'
-import type { Comment, RoleTypes, User } from './auth.contract'
-import { useUser } from './ProtectedRoute'
+import type { Comment, RoleTypes, User } from '../auth.contract'
+import { useUser } from '../auth.config'
 
 export const POLICIES = {
   'comment:delete': (user: User, comment: Comment) => {

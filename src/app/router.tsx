@@ -1,4 +1,4 @@
-import { ProtectedRoute } from '@/auth/ProtectedRoute'
+import { ProtectedRoute } from '@/auth/components/ProtectedRoute'
 import { paths } from '@/infra/paths'
 import { QueryClient, useQueryClient } from '@tanstack/react-query'
 import { createBrowserRouter, RouterProvider } from 'react-router'

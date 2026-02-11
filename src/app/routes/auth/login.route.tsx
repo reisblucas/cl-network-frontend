@@ -2,7 +2,7 @@ import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from
 import { Head } from '@/infra/common/seo'
 import { useNavigate } from 'react-router'
 import { useForm } from 'react-hook-form'
-import { loginInputSchema, type LoginInput } from '@/auth'
+import { loginInputSchema, useLogin, type LoginInput } from '@/auth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Flex } from '@/components/common'
@@ -17,6 +17,11 @@ import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/in
 export function LoginRoute() {
   const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
+  const loginMutation = useLogin({
+    onSuccess: () => {
+      navigate(paths.app.root.getHref())
+    }
+  })
 
   const {
     register,
@@ -52,7 +57,7 @@ export function LoginRoute() {
           </CardHeader>
 
           <CardContent>
-            <form onSubmit={handleSubmit((data) => console.log(data))}>
+            <form onSubmit={handleSubmit((data) => loginMutation.mutate(data))}>
               <Flex className="flex-col gap-4">
                 <Flex className="justify-between">
                   <Label htmlFor="login">Username or email</Label>

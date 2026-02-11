@@ -1,15 +1,9 @@
-import { configureAuth } from 'react-query-auth'
 import z from 'zod'
-import { api } from '../infra/common/axios/axios.client'
-import { Navigate, useLocation } from 'react-router'
-import { paths } from '@/infra/paths'
-import type { AuthResponse, User } from './auth.contract'
 
 // regex
 const HAS_SPECIAL_CHARACTER_REGEX = /[^A-Za-z0-9\s]/
 // end regex
 
-// auth.dto.ts
 const PASSWORD = {
   min: 8,
   max: 128
@@ -89,58 +83,3 @@ export const registerInputSchema = z
   })
   .strict()
 export type RegisterInput = z.infer<typeof registerInputSchema>
-
-// end auth.dto.ts
-
-// auth.contract.ts
-
-// end auth.contract.ts
-
-// auth.service.ts
-export const loginWithEmailAndPassword = async (data: LoginInput): Promise<AuthResponse> => {
-  // TODO: add a mock auth login later
-  return api.post('/auth/login', data)
-}
-
-export const registerWithEmailAndPassword = async (data: RegisterInput): Promise<AuthResponse> => {
-  return api.post('/auth/register', data)
-}
-
-export const getUser = async (): Promise<User> => {
-  return api.get('/auth/me')
-}
-
-export const logout = async () => {
-  return api.post('/auth/logout')
-}
-// end auth.service.ts
-
-// auth.config.ts
-const authConfig = {
-  // TODO: user fetch api simulation late
-  userFn: getUser,
-  loginFn: async (data: LoginInput) => {
-    const response = await loginWithEmailAndPassword(data)
-    return response.user
-  },
-  // TODO: register api simulation later
-  registerFn: async (data: RegisterInput) => {
-    const response = await registerWithEmailAndPassword(data)
-    return response.user
-  },
-  logoutFn: logout
-}
-// end auth.config.ts
-
-export const { useLogin, useLogout, useUser, AuthLoader } = configureAuth(authConfig)
-
-export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const user = useUser()
-  const location = useLocation()
-
-  if (!user.data) {
-    return <Navigate to={paths.auth.login.getHref(location.pathname)} />
-  }
-
-  return children
-}
