@@ -1,10 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { configureAuth } from 'react-query-auth'
 import type { LoginInput, RegisterInput } from './auth.dto'
 import { getUser, loginWithEmailAndPassword, registerWithEmailAndPassword, logout } from './auth.service'
 
 const authConfig = {
   // TODO: user fetch api simulation late
-  userFn: getUser,
+  userFn: async () => {
+    try {
+      const response = await getUser()
+      return response
+    } catch (err: any) {
+      console.error('Auth User:', err.message)
+      return null
+    }
+  },
   loginFn: async (data: LoginInput) => {
     const response = await loginWithEmailAndPassword(data)
     return response.user

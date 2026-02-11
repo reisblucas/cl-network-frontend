@@ -69,29 +69,30 @@ export function authenticate({ login, password }: LoginInput) {
 export const AUTH_COOKIE = `bulletproof_app_token`
 
 export function requireAuth(cookies: Record<string, string>) {
-  try {
-    const encodedToken = cookies[AUTH_COOKIE] || Cookies.get(AUTH_COOKIE)
-    if (!encodedToken) {
-      return { error: 'Unauthorized', user: null }
-    }
-    const decodedToken = decode(encodedToken) as { id: string }
-
-    const user = db.user.findFirst({
-      where: {
-        id: {
-          equals: decodedToken.id
-        }
-      }
-    })
-
-    if (!user) {
-      return { error: 'Unauthorized', user: null }
-    }
-
-    return { user: sanitizeUser(user) }
-  } catch (err: any) {
-    return { error: 'Unauthorized', user: null }
+  // try {
+  const encodedToken = cookies[AUTH_COOKIE] || Cookies.get(AUTH_COOKIE)
+  if (!encodedToken) {
+    throw new Error('Unauthorized')
   }
+
+  const decodedToken = decode(encodedToken) as { id: string }
+
+  const user = db.user.findFirst({
+    where: {
+      id: {
+        equals: decodedToken.id
+      }
+    }
+  })
+
+  if (!user) {
+    throw new Error('Unauthorized')
+  }
+
+  return { user: sanitizeUser(user) }
+  // } catch (err: any) {
+  //   throw new Error(err?.message || 'Unauthorized')
+  // }
 }
 
 export function requireAdmin(user: any) {

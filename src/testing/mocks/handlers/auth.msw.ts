@@ -14,7 +14,7 @@ export const authHandlers = [
       const { user } = requireAuth(cookies)
       return HttpResponse.json({ data: user })
     } catch (error: any) {
-      return HttpResponse.json({ error: error?.message || 'Server Error' }, { status: 500 })
+      return HttpResponse.json({ error: error?.message || 'Server Error' }, { status: 401 })
     }
 
     // if (request.headers)

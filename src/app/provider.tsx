@@ -28,6 +28,11 @@ export function AppProvider({ children }: AppProviderProps) {
           {/* Notifications */}
           <ThemeProvider>
             <AuthLoader
+              renderError={(error) => {
+                //  Fallback Component is not rendered when error throws inside AuthLoader
+                console.error('Error in Auth Loader', error)
+                return <MainErrorFallback />
+              }}
               renderLoading={() => (
                 <div className="flex h-screen w-screen items-center justify-center">
                   <Spinner className="size-3" />

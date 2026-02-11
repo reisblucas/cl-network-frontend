@@ -21,8 +21,8 @@ api.interceptors.response.use(
   (error) => {
     const message = error.response?.data?.message || error.message || 'An unexpected error occurred'
     // TODO: add toast later
-    console.error(message)
-    alert('AXIOS RESPONSE ERROR: ' + message)
+    console.error('AXIOS RESPONSE ERROR: ', message)
+    // alert('AXIOS RESPONSE ERROR: ' + message)
 
     if (error.response?.status === 401) {
       // 1 flush data
