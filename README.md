@@ -1,5 +1,42 @@
 # React + TypeScript + Vite
 
+## Roadmap
+
+- [ ] Minimal setup
+  - [x] vite
+  - [x] react
+  - [x] react-helmet
+  - [x] react-query
+  - [x] react-query-auth
+  - [x] react-hook-form
+  - [x] react-router v7
+  - [x] eslint
+  - [ ] dayjs setup
+  - [x] shadcn/ui
+  - [x] tailwind
+  - [x] usehooks-ts
+  - [x] zod
+  - [x] zustand
+  - [x] msw - mock app calls
+  - [x] msw setup to work
+- [ ] Login & Register screen
+  - [x] error show/handlers
+  - [x] debounce /users/email validation
+  - [ ] api & services & api state
+    - [ ] auth
+      - [x] react-query-auth config
+      - [x] /auth/login
+      - [x] /auth/register
+      - [x] /auth/me
+      - [ ] /auth/logout
+    - [ ] users
+      - [x] /users/email
+    - [ ] GET /posts
+    - [ ] DELETE /post/:postId
+    - [ ] PATCH /post/:postId
+- [ ] Deploy
+  - [ ] Vercel
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
@@ -30,18 +67,18 @@ export default defineConfig([
       // Alternatively, use this for stricter rules
       tseslint.configs.strictTypeChecked,
       // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+      tseslint.configs.stylisticTypeChecked
 
       // Other configs...
     ],
     languageOptions: {
       parserOptions: {
         project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
+        tsconfigRootDir: import.meta.dirname
+      }
       // other options...
-    },
-  },
+    }
+  }
 ])
 ```
 
@@ -61,15 +98,15 @@ export default defineConfig([
       // Enable lint rules for React
       reactX.configs['recommended-typescript'],
       // Enable lint rules for React DOM
-      reactDom.configs.recommended,
+      reactDom.configs.recommended
     ],
     languageOptions: {
       parserOptions: {
         project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
+        tsconfigRootDir: import.meta.dirname
+      }
       // other options...
-    },
-  },
+    }
+  }
 ])
 ```
