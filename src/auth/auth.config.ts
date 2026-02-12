@@ -30,4 +30,4 @@ const authConfig = {
   logoutFn: logout
 }
 
-export const { useLogin, useLogout, useUser, AuthLoader } = configureAuth(authConfig)
+export const { useLogin, useLogout, useUser, useRegister, AuthLoader } = configureAuth(authConfig)

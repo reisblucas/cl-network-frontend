@@ -1,6 +1,7 @@
-import { registerInputSchema, type RegisterInput } from '@/auth'
+import { registerInputSchema, useRegister, type RegisterInput } from '@/auth'
 import { Flex } from '@/components/common'
 import { isValidForm, PasswordInput } from '@/components/common/inputs'
+import { toastDescriptionWrapper, useNotificationsStore } from '@/components/common/notifications'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardAction } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -59,6 +60,7 @@ const FORM_INPUTS: { id: keyof RegisterInput; placeholder: string; label: string
 ]
 
 export function RegisterRoute() {
+  const notificationsStore = useNotificationsStore()
   const methods = useForm<RegisterInput>({
     resolver: standardSchemaResolver(registerInputSchema),
     defaultValues: {
@@ -79,11 +81,18 @@ export function RegisterRoute() {
 
   const navigate = useNavigate()
 
-  // const registerMutation = useRegister({
-  //   onSuccess: () => {
-  //     navigate(paths.app.root.getHref())
-  //   }
-  // })
+  const registerMutation = useRegister({
+    onSuccess: () => {
+      navigate(paths.app.root.getHref())
+    },
+    onError: (error) => {
+      notificationsStore.addNotification({
+        title: 'Register failed',
+        description: toastDescriptionWrapper(error),
+        type: 'error'
+      })
+    }
+  })
 
   return (
     <>
@@ -102,7 +111,7 @@ export function RegisterRoute() {
 
           <CardContent>
             <FormProvider {...methods}>
-              <form onSubmit={handleSubmit((data) => console.log(data))}>
+              <form onSubmit={handleSubmit((data) => registerMutation.mutate(data))}>
                 <Flex className="flex-col gap-4">
                   {FORM_INPUTS.map((fi) => {
                     if (fi.id === 'password' || fi.id === 'password_confirmation') {

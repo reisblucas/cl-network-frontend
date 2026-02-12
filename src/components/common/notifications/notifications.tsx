@@ -11,13 +11,13 @@ export function Notifications() {
 
       toast[n.type](n.title, {
         duration: n.duration ?? 5000,
-        description: n.description,
-        action: {
-          label: 'Dismiss',
-          onClick: () => {
-            notificationsStore.dismissNotification(n.id)
-          }
-        }
+        description: n.description
+        // action: {
+        //   label: <X className="size-2" />,
+        //   onClick: () => {
+        //     notificationsStore.dismissNotification(n.id)
+        //   }
+        // }
       })
 
       notificationsStore.markAsRendered(n.id)

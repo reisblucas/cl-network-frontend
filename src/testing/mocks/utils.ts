@@ -45,25 +45,42 @@ const omit = <T extends object>(obj: T, keys: string[]): T => {
 export const sanitizeUser = <O extends object>(user: O) => omit<O>(user, ['password', 'iat'])
 
 export function authenticate({ login, password }: LoginInput) {
-  const user = db.user.findFirst({
+  // get user by username
+  const user_by_username = db.user.findFirst({
     where: {
-      email: {
-        equals: login
-      },
       username: {
         equals: login
       }
     }
   })
 
-  if (user?.password === hash(password)) {
-    const sanitizedUser = sanitizeUser(user)
+  if (!user_by_username) {
+    // get user by email
+    const user_by_email = db.user.findFirst({
+      where: {
+        email: {
+          equals: login
+        }
+      }
+    })
+    if (!user_by_email) {
+      throw new Error('Invalid email', { cause: 401 })
+    }
+
+    if (user_by_email?.password !== hash(password)) {
+      throw new Error('Invalid email or password', { cause: 401 })
+    }
+    const sanitizedUser = sanitizeUser(user_by_email)
+    const encodedToken = encode(sanitizedUser)
+    return { user: sanitizedUser, jwt: encodedToken }
+  } else {
+    if (user_by_username?.password !== hash(password)) {
+      throw new Error('Invalid username or password', { cause: 401 })
+    }
+    const sanitizedUser = sanitizeUser(user_by_username)
     const encodedToken = encode(sanitizedUser)
     return { user: sanitizedUser, jwt: encodedToken }
   }
-
-  const error = new Error('Invalid username or password', { cause: 401 })
-  throw error
 }
 
 export const AUTH_COOKIE = `bulletproof_app_token`

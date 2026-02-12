@@ -5,8 +5,8 @@ import { nanoid } from 'nanoid'
 const models = {
   user: {
     id: primaryKey(nanoid),
-    firstName: String,
-    lastName: String,
+    first_name: String,
+    last_name: String,
     email: String,
     username: String,
     password: String,
@@ -65,6 +65,7 @@ export const persistDb = async (model: Model) => {
 
 export const initializeDb = async () => {
   const database = await loadDb()
+
   Object.entries(db).forEach(([key, model]) => {
     const dataEntres = database[key]
     if (dataEntres) {
