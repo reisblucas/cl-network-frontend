@@ -62,17 +62,16 @@ export function authenticate({ login, password }: LoginInput) {
     return { user: sanitizedUser, jwt: encodedToken }
   }
 
-  const error = new Error('Invalid username or password')
+  const error = new Error('Invalid username or password', { cause: 401 })
   throw error
 }
 
 export const AUTH_COOKIE = `bulletproof_app_token`
 
 export function requireAuth(cookies: Record<string, string>) {
-  // try {
   const encodedToken = cookies[AUTH_COOKIE] || Cookies.get(AUTH_COOKIE)
   if (!encodedToken) {
-    throw new Error('Unauthorized')
+    throw new Error('Unauthorized', { cause: 401 })
   }
 
   const decodedToken = decode(encodedToken) as { id: string }
@@ -86,13 +85,10 @@ export function requireAuth(cookies: Record<string, string>) {
   })
 
   if (!user) {
-    throw new Error('Unauthorized')
+    throw new Error('Unauthorized', { cause: 401 })
   }
 
   return { user: sanitizeUser(user) }
-  // } catch (err: any) {
-  //   throw new Error(err?.message || 'Unauthorized')
-  // }
 }
 
 export function requireAdmin(user: any) {

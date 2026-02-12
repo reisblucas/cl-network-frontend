@@ -14,24 +14,8 @@ export const authHandlers = [
       const { user } = requireAuth(cookies)
       return HttpResponse.json({ data: user })
     } catch (error: any) {
-      return HttpResponse.json({ error: error?.message || 'Server Error' }, { status: 401 })
+      return HttpResponse.json({ error: error?.message || 'Server Error' }, { status: error?.cause || 500 })
     }
-
-    // if (request.headers)
-    //   return HttpResponse.json<User>(
-    //     {
-    //       id: '1',
-    //       username: 'johnwick',
-    //       email: 'johnwick@gmail.com',
-    //       first_name: 'John',
-    //       last_name: 'Wick',
-    //       bio: 'It was not just a puppy',
-    //       role: 'USER',
-    //       created_at: new Date().toISOString(),
-    //       updated_at: new Date().toISOString()
-    //     },
-    //     { status: 200 }
-    //   )
   }),
 
   http.post(`${env.API_URL}/auth/login`, async ({ request }) => {
@@ -52,10 +36,10 @@ export const authHandlers = [
     } catch (error: any) {
       return HttpResponse.json(
         {
-          status: 500,
+          status: error?.cause || 500,
           message: error?.message || 'Server Error'
         },
-        { status: 500 }
+        { status: error?.cause || 500 }
       )
     }
   })
