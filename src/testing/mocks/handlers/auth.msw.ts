@@ -54,7 +54,7 @@ export const authHandlers = [
 
     try {
       const body_data = (await request.json()) as UserRegister
-      const { password, password_confirmation, ...bd_parsed } = registerInputSchema.parse(body_data)
+      const { password, password_confirmation: _pc, ...bd_parsed } = registerInputSchema.parse(body_data)
 
       const user_by_email = db.user.findFirst({
         where: {
@@ -82,6 +82,40 @@ export const authHandlers = [
       await persistDb('user')
       await loginHandler({ request })
       return HttpResponse.json({ message: 'User registered successfully' }, { status: 201 })
+    } catch (error: any) {
+      return HttpResponse.json({ message: error?.message || 'Server Error' }, { status: error?.cause || 500 })
+    }
+  }),
+
+  /**
+   * Route to check if email is already used
+   * usecases:
+   * - register
+   * - user update
+   */
+  http.get(`${env.API_URL}/users/email`, async ({ request }) => {
+    await networkDelay()
+
+    try {
+      const url = new URL(request.url)
+      const email = url.searchParams.get('exists')
+      console.log('P', email)
+
+      if (!email) {
+        return HttpResponse.json({ message: 'Email is required' }, { status: 400 })
+      }
+      // const body_data = (await params.json()) as { email: string }
+      const email_exists = db.user.findFirst({
+        where: {
+          email: { equals: email }
+        }
+      })
+
+      if (email_exists) {
+        return HttpResponse.json({ data: true }, { status: 200 })
+      }
+
+      return HttpResponse.json({ data: false }, { status: 200 })
     } catch (error: any) {
       return HttpResponse.json({ message: error?.message || 'Server Error' }, { status: error?.cause || 500 })
     }

@@ -7,13 +7,15 @@ import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardAction } from
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { BIOGRAPHY, PASSWORD } from '@/domain/validation'
+import { api } from '@/infra/common/axios'
 import { Head } from '@/infra/common/seo'
 import { paths } from '@/infra/paths'
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { User2 } from 'lucide-react'
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router'
+import { useDebounceValue } from 'usehooks-ts'
 
 const FORM_INPUTS: { id: keyof RegisterInput; placeholder: string; label: string; maxLength?: number | null }[] = [
   {
@@ -76,7 +78,10 @@ export function RegisterRoute() {
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
+    setError,
+    watch,
+    clearErrors
   } = methods
 
   const navigate = useNavigate()
@@ -93,6 +98,31 @@ export function RegisterRoute() {
       })
     }
   })
+
+  /**
+   * Problem only occurs if we use it in memo or callback
+   */
+  // eslint-disable-next-line react-hooks/incompatible-library
+  const [debouncedEmail, setDebounced] = useDebounceValue(watch('email'), 500)
+
+  useEffect(() => {
+    const mutate = async () => {
+      if (debouncedEmail) {
+        const params = new URLSearchParams()
+        params.set('exists', debouncedEmail)
+        const response = await api.get('/users/email', { params })
+
+        if (response.status === 400) return
+        if (response.data.data) {
+          setError('email', { message: 'Email already in use' })
+        } else {
+          clearErrors('email')
+        }
+      }
+    }
+
+    mutate()
+  }, [clearErrors, debouncedEmail, setError])
 
   return (
     <>
@@ -140,6 +170,11 @@ export function RegisterRoute() {
                           {...register(fi.id)}
                           className="placeholder-shown:italic"
                           maxLength={fi?.maxLength ?? undefined}
+                          onChange={(e) => {
+                            if (fi.id === 'email') {
+                              setDebounced(e.target.value)
+                            }
+                          }}
                         />
                       </Fragment>
                     )
