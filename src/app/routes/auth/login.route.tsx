@@ -12,12 +12,22 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { Lock } from 'lucide-react'
 import { PasswordInput } from '@/components/common/inputs'
 import { Spinner } from '@/components/ui/spinner'
+import { toastDescriptionWrapper, useNotificationsStore } from '@/components/common/notifications'
 
 export function LoginRoute() {
   const navigate = useNavigate()
+  const notificationsStore = useNotificationsStore()
   const loginMutation = useLogin({
     onSuccess: () => {
       navigate(paths.app.root.getHref())
+    },
+    onError: (error) => {
+      notificationsStore.addNotification({
+        title: 'Login failed',
+        description: toastDescriptionWrapper(error),
+        type: 'error',
+        duration: 10000
+      })
     }
   })
 

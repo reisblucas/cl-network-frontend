@@ -7,6 +7,7 @@ import { MainErrorFallback } from '@/components/errors/main'
 import { AuthLoader } from '@/auth'
 import { Spinner } from '@/components/ui/spinner'
 import { ThemeProvider } from '@/providers'
+import { Notifications } from '@/components/common/notifications'
 
 type AppProviderProps = {
   children: React.ReactNode
@@ -27,6 +28,8 @@ export function AppProvider({ children }: AppProviderProps) {
           {import.meta.env.DEV && <ReactQueryDevtools />}
           {/* Notifications */}
           <ThemeProvider>
+            <Notifications />
+            {/* <Toaster /> */}
             <AuthLoader
               renderError={(error) => {
                 //  Fallback Component is not rendered when error throws inside AuthLoader
