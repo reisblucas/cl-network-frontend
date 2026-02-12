@@ -1,6 +1,5 @@
 import axios, { type InternalAxiosRequestConfig } from 'axios'
 import { env } from '../../env'
-import { GlobalNavigate } from '../react-router/utils/'
 
 export const api = axios.create({
   baseURL: env.API_URL
@@ -28,9 +27,11 @@ api.interceptors.response.use(
       // 1 flush data
       // 2 local storage, etc
       // 3 redirect to Landing Page/Unauthorized/Login
-      GlobalNavigate?.('/')
+      // GlobalNavigate?.('/login')
+      // toast.error('Session expired, please login again')
+      // window.location.href = '/auth/login'
     }
 
-    return Promise.reject(error)
+    return Promise.reject(error.response?.data || error)
   }
 )

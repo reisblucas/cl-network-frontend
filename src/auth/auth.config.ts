@@ -11,6 +11,10 @@ const authConfig = {
       return response
     } catch (err: any) {
       console.error('Auth User:', err.message)
+      /**
+       * React Query pattern expect a null response instead of void
+       * without it, AuthLoader renders MainErrorFallback
+       */
       return null
     }
   },
