@@ -11,3 +11,9 @@ export type BaseEntity = {
 export type Entity<T> = {
   [K in keyof T]: T[K]
 } & BaseEntity
+
+export type BaseAxiosResponse<T> = {
+  data: T
+  metadata?: object // TODO: TO be defined later
+  message?: string
+}

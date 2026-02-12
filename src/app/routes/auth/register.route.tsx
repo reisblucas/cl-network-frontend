@@ -1,3 +1,4 @@
+import { useEmailCheckQuery } from '@/api/users'
 import { registerInputSchema, useRegister, type RegisterInput } from '@/auth'
 import { Flex } from '@/components/common'
 import { isValidForm, PasswordInput } from '@/components/common/inputs'
@@ -7,7 +8,6 @@ import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardAction } from
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { BIOGRAPHY, PASSWORD } from '@/domain/validation'
-import { api } from '@/infra/common/axios'
 import { Head } from '@/infra/common/seo'
 import { paths } from '@/infra/paths'
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -83,6 +83,7 @@ export function RegisterRoute() {
     watch,
     clearErrors
   } = methods
+  const emailWatch = watch('email')
 
   const navigate = useNavigate()
 
@@ -103,18 +104,19 @@ export function RegisterRoute() {
    * Problem only occurs if we use it in memo or callback
    */
   // eslint-disable-next-line react-hooks/incompatible-library
-  const [debouncedEmail, setDebounced] = useDebounceValue(watch('email'), 500)
+  const [debouncedEmail, setDebounced] = useDebounceValue(emailWatch, 500)
+  const emailCheckQuery = useEmailCheckQuery({ email: debouncedEmail })
 
   useEffect(() => {
     const mutate = async () => {
       if (debouncedEmail) {
         const params = new URLSearchParams()
         params.set('exists', debouncedEmail)
-        const response = await api.get('/users/email', { params })
+        console.log('EMAIL CHECK QUERY', emailCheckQuery)
 
-        if (response.status === 400) return
-        if (response.data.data) {
-          setError('email', { message: 'Email already in use' })
+        if (emailCheckQuery.isError) return
+        if (emailCheckQuery.data) {
+          setError('email', { message: 'cu' })
         } else {
           clearErrors('email')
         }
