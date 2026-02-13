@@ -1,3 +1,5 @@
-export * from './create-post.service.ts'
 export * from './create-post.query.ts'
 export * from './create-post.dto.ts'
+export * from './get-posts.query.ts'
+export * from './get-posts.dto.ts'
+export * from './delete-post.query.ts'
