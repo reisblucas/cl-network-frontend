@@ -57,8 +57,8 @@ export function NavSecondary({ items, ...props }: NavSecondaryProps) {
       <SidebarGroupContent>
         <SidebarMenu>
           {items.map((item) => (
-            <Dialog open={open[item.label]} onOpenChange={() => handleDialogOpenChange(item.label)}>
-              <SidebarMenuItem key={item.label}>
+            <Dialog key={item.label} open={open[item.label]} onOpenChange={() => handleDialogOpenChange(item.label)}>
+              <SidebarMenuItem>
                 <DialogTrigger asChild>
                   <SidebarMenuButton>
                     <item.icon />
