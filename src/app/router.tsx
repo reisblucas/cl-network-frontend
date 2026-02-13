@@ -7,7 +7,7 @@ import { useMemo } from 'react'
 import { LandingRoute } from './routes/landing.route'
 import { NotFoundRoute } from './routes/not-found.route'
 import { LoginRoute } from './routes/auth/login.route'
-import { PublicLayout } from '@/components/layouts'
+import { AppLayout, PublicLayout } from '@/components/layouts'
 import { RegisterRoute } from './routes/auth/register.route'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -50,7 +50,9 @@ const createAppRouter = (queryClient: QueryClient) =>
       ErrorBoundary: AppRootErrorBoundary,
       element: (
         <ProtectedRoute>
-          <AppRoot />
+          <AppLayout>
+            <AppRoot />
+          </AppLayout>
         </ProtectedRoute>
       )
     },

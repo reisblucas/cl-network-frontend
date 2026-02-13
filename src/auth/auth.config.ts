@@ -27,7 +27,10 @@ const authConfig = {
     const response = await registerWithEmailAndPassword(data)
     return response.user
   },
-  logoutFn: logout
+  logoutFn: async (id: string) => {
+    const response = await logout(id)
+    return response
+  }
 }
 
 export const { useLogin, useLogout, useUser, useRegister, AuthLoader } = configureAuth(authConfig)

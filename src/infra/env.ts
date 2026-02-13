@@ -9,7 +9,9 @@ const createEnv = () => {
       .transform((s) => s === 'true')
       .optional(),
     APP_URL: z.string().optional().default('http://localhost:3000'),
-    APP_MOCK_API_PORT: z.string().optional().default('8080')
+    MOCK_API_PORT: z.string().optional().default('8080'),
+    //
+    CLN_API_URL: z.string()
   })
 
   const envVars = Object.entries(import.meta.env).reduce<Record<string, string>>((acc, curr) => {

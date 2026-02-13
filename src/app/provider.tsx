@@ -8,6 +8,8 @@ import { AuthLoader } from '@/auth'
 import { Spinner } from '@/components/ui/spinner'
 import { ThemeProvider } from '@/providers'
 import { Notifications } from '@/components/common/notifications'
+import { TooltipProvider } from '@/components/ui/tooltip'
+import { SidebarProvider } from '@/components/ui/sidebar'
 
 type AppProviderProps = {
   children: React.ReactNode
@@ -42,7 +44,9 @@ export function AppProvider({ children }: AppProviderProps) {
                 </div>
               )}
             >
-              {children}
+              <SidebarProvider>
+                <TooltipProvider>{children}</TooltipProvider>
+              </SidebarProvider>
             </AuthLoader>
           </ThemeProvider>
         </QueryClientProvider>
