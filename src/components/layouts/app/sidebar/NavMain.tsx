@@ -17,12 +17,12 @@ import { Link, useNavigate } from 'react-router'
 interface NavMainProps {
   items: {
     label: string
-    href: string
+    href: (param?: string | null | undefined) => string
     icon: LucideIcon
     isActive: boolean
     items?: {
       label: string
-      href: string
+      href: (param?: string | null | undefined) => string
       isActive: boolean
     }[]
   }[]
@@ -44,7 +44,7 @@ export function NavMain({ items }: NavMainProps) {
           <Collapsible key={item.label} asChild defaultOpen={item.isActive}>
             <SidebarMenuItem>
               <SidebarMenuButton tooltip={item.label} asChild className={`${handleNavCSSActive(item.isActive)}`}>
-                <Link to={item.href}>
+                <Link to={item.href()}>
                   <item.icon />
                   <span>{item.label}</span>
                 </Link>
@@ -67,7 +67,7 @@ export function NavMain({ items }: NavMainProps) {
                               variant="link"
                               className={`justify-start ${handleNavCSSActive(subitem.isActive)}`}
                               asChild
-                              onClick={() => navigate(subitem.href)}
+                              onClick={() => navigate(subitem.href())}
                             >
                               <span>{subitem.label}</span>
                             </Button>

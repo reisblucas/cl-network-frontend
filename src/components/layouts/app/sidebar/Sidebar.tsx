@@ -4,7 +4,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } fr
 import { paths } from '@/infra/paths'
 import { AUTH_COOKIE, decode } from '@/testing/mocks/utils'
 import Cookies from 'js-cookie'
-import { LogOutIcon, Settings, User, FileText, Bell, Send, Bug, Waypoints } from 'lucide-react'
+import { LogOutIcon, Settings, User, FileText, Bell, Send, Bug, Waypoints, type LucideIcon } from 'lucide-react'
 import { useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router'
 import { toast } from 'sonner'
@@ -12,27 +12,41 @@ import { NavMain } from './NavMain'
 import { NavSecondary } from './NavSecondary'
 import { Tenant } from './Tenant'
 
-const sidebar_nav = {
+const sidebar_nav: {
+  navMain: {
+    label: string
+    href: (param?: string | null | undefined) => string
+    icon: LucideIcon
+    isActive: boolean
+    items: { label: string; href: (param?: string | null | undefined) => string; isActive: boolean }[]
+  }[]
+  navSecondary: {
+    label: string
+    href: (param?: string | null | undefined) => string
+    icon: LucideIcon
+    isActive: boolean
+  }[]
+} = {
   navMain: [
     {
       label: 'Posts',
-      href: paths.app.root.getHref(),
+      href: paths.app.posts.getHref,
       icon: FileText,
       isActive: true,
       items: [
         {
           label: 'My Posts',
-          href: paths.app.root.getHref(),
+          href: (param?: string | null | undefined) => paths.app.post.getHref(param ?? ''),
           isActive: true
         },
-        { label: 'Liked Posts', href: paths.app.root.getHref(), isActive: false },
-        { label: 'Mentions', href: paths.app.root.getHref(), isActive: false },
-        { label: 'Archived', href: paths.app.root.getHref(), isActive: false }
+        { label: 'Liked Posts', href: paths.app.root.getHref, isActive: false },
+        { label: 'Mentions', href: paths.app.root.getHref, isActive: false },
+        { label: 'Archived', href: paths.app.root.getHref, isActive: false }
       ]
     },
     {
       label: 'Notifications',
-      href: paths.app.root.getHref(),
+      href: paths.app.root.getHref,
       icon: Bell,
       isActive: false,
       items: []
@@ -41,13 +55,13 @@ const sidebar_nav = {
   navSecondary: [
     {
       label: 'Feedback',
-      href: '#',
+      href: () => '#',
       icon: Send,
       isActive: false
     },
     {
       label: 'Bug',
-      href: '#',
+      href: () => '#',
       icon: Bug,
       isActive: false
     }

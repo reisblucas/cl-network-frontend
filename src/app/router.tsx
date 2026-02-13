@@ -9,6 +9,7 @@ import { NotFoundRoute } from './routes/not-found.route'
 import { LoginRoute } from './routes/auth/login.route'
 import { AppLayout, PublicLayout } from '@/components/layouts'
 import { RegisterRoute } from './routes/auth/register.route'
+import { PostsRoute } from './routes/app/posts.route'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const convert = (queryClient: QueryClient) => (mod: any) => {
@@ -54,7 +55,21 @@ const createAppRouter = (queryClient: QueryClient) =>
             <AppRoot />
           </AppLayout>
         </ProtectedRoute>
-      )
+      ),
+      children: [
+        // {
+        //   path: paths.app.settings.path,
+        //   element: <SettingsRoute />
+        // },
+        // {
+        //   path: paths.app.profile.path,
+        //   element: <ProfileRoute />
+        // },
+        {
+          path: paths.app.posts.path,
+          element: <PostsRoute />
+        }
+      ]
     },
     {
       path: '*',
