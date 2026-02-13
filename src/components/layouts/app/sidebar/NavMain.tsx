@@ -36,7 +36,7 @@ export function NavMain({ items }: NavMainProps) {
   }
 
   return (
-    <SidebarGroup className="p-0">
+    <SidebarGroup>
       <SidebarGroupLabel>Social</SidebarGroupLabel>
 
       <SidebarMenu>

@@ -1,28 +1,16 @@
 import { useLogout } from '@/auth'
 import { Flex } from '@/components/common'
-import { Button } from '@/components/ui/button'
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
-import { Popover, PopoverContent, PopoverHeader, PopoverTitle, PopoverTrigger } from '@/components/ui/popover'
-import { Separator } from '@/components/ui/separator'
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarMenuButton,
-  SidebarMenuItem
-} from '@/components/ui/sidebar'
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from '@/components/ui/sidebar'
 import { paths } from '@/infra/paths'
 import { AUTH_COOKIE, decode } from '@/testing/mocks/utils'
 import Cookies from 'js-cookie'
-import { UserCircleIcon, LogOutIcon, Settings, User, FileText, Bell, Send, Bug } from 'lucide-react'
+import { LogOutIcon, Settings, User, FileText, Bell, Send, Bug, Waypoints } from 'lucide-react'
 import { useCallback, useMemo } from 'react'
-import { Link, useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
 import { toast } from 'sonner'
 import { NavMain } from './NavMain'
+import { NavSecondary } from './NavSecondary'
+import { Tenant } from './Tenant'
 
 const sidebar_nav = {
   navMain: [
@@ -99,18 +87,19 @@ export function AppSidebar() {
   )
 
   return (
-    <Flex className="w-full justify-end">
-      <Sidebar>
-        <SidebarHeader>CL Network</SidebarHeader>
-        <SidebarContent>
-          <NavMain items={sidebar_nav.navMain} />
-          {/* <NavSecondary className="mt-auto" /> */}
-        </SidebarContent>
+    <Sidebar collapsible="icon">
+      {/* header + icon */}
+      <SidebarHeader>
+        <Tenant />
+      </SidebarHeader>
+      {/*  */}
+      <SidebarContent>
+        <NavMain items={sidebar_nav.navMain} />
+        <NavSecondary className="mt-auto" items={sidebar_nav.navSecondary} />
+      </SidebarContent>
 
-        <SidebarFooter>
-          {/* <NavUser user={users} /> */}
-        </SidebarFooter>
-      </Sidebar>
-    </Flex>
+      <SidebarFooter>{/* <NavUser user={users} /> */}</SidebarFooter>
+      <SidebarRail />
+    </Sidebar>
   )
 }
