@@ -19,7 +19,7 @@ import z from 'zod'
 type NavSecondaryProps = {
   items: {
     label: string
-    href: string
+    href: (param: string | null | undefined) => string
     icon: LucideIcon
     isActive: boolean
   }[]
