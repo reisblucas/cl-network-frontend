@@ -18,6 +18,14 @@ export const paths = {
   },
 
   app: {
+    settings: {
+      path: '/app/settings',
+      getHref: () => '/app/settings'
+    },
+    profile: {
+      path: '/app/profile',
+      getHref: () => '/app/profile'
+    },
     root: {
       path: '/app',
       getHref: () => '/app'

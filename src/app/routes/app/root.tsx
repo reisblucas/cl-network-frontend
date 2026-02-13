@@ -6,10 +6,10 @@ export const AppRootErrorBoundary = () => {
 
 export const AppRoot = () => {
   return (
-    // app layout
+    // app layout if needed
     <div>
       Wrap OUTLET with layout shell
-      <Outlet />
+      {/* <Outlet /> */}
     </div>
   )
 }
