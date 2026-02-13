@@ -15,6 +15,6 @@ export const getUser = async (): Promise<User> => {
   return api.get('/auth/me')
 }
 
-export const logout = async () => {
-  return api.post('/auth/logout')
+export const logout = async (id: string) => {
+  return api.post('/auth/logout', { id })
 }
