@@ -7,10 +7,10 @@ interface AppLayoutProps {
 
 export function AppLayout({ children }: AppLayoutProps) {
   return (
-    <Flex className="flex-column">
+    <Flex className="flex-column w-full">
       <AppSidebar />
       {/* mobileHeader based on breakpoint? */}
-      <Flex className="justify-center sm:min-w-4/5">{children}</Flex>
+      <Flex className="@container p-2 justify-center">{children}</Flex>
     </Flex>
   )
 }
