@@ -16,7 +16,9 @@ function authRequestInterceptor(config: InternalAxiosRequestConfig): InternalAxi
 
 api.interceptors.request.use(authRequestInterceptor)
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    return response.data
+  },
   (error) => {
     const message = error.response?.data?.message || error.message || 'An unexpected error occurred'
     // TODO: add toast later

@@ -1,4 +1,4 @@
-import type { Entity } from '@/infra/__types__/api.type'
+import type { Entity } from '@/infra/__types__'
 
 export type RoleTypes = 'ADMIN' | 'USER'
 
