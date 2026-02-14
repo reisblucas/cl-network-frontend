@@ -9,8 +9,9 @@ const createEnv = () => {
       .transform((s) => s === 'true')
       .optional(),
     APP_URL: z.string().optional().default('http://localhost:3000'),
-    MOCK_API_PORT: z.string().optional().default('8080'),
     //
+    AUTH_COOKIE: z.string(),
+    MOCK_API_PORT: z.string().optional().default('8080'),
     CLN_API_URL: z.string()
   })
 

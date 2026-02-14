@@ -3,6 +3,7 @@ import { delay } from 'msw'
 import Cookies from 'js-cookie'
 import { db } from './db'
 import type { LoginInput } from '@/auth'
+import { env } from '@/infra/env'
 
 export const networkDelay = () => {
   const delayTime = import.meta.env.TEST ? 200 : Math.floor(Math.random() * 700) + 300
@@ -83,10 +84,8 @@ export function authenticate({ login, password }: LoginInput) {
   }
 }
 
-export const AUTH_COOKIE = `bulletproof_app_token`
-
 export function requireAuth(cookies: Record<string, string>) {
-  const encodedToken = cookies[AUTH_COOKIE] || Cookies.get(AUTH_COOKIE)
+  const encodedToken = cookies[env.AUTH_COOKIE] || Cookies.get(env.AUTH_COOKIE)
   if (!encodedToken) {
     throw new Error('Unauthorized', { cause: 401 })
   }

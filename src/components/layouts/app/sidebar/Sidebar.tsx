@@ -2,7 +2,7 @@ import { useLogout } from '@/auth'
 import { Flex } from '@/components/common'
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from '@/components/ui/sidebar'
 import { paths } from '@/infra/paths'
-import { AUTH_COOKIE, decode } from '@/testing/mocks/utils'
+import { decode } from '@/testing/mocks/utils'
 import Cookies from 'js-cookie'
 import { LogOutIcon, Settings, User, FileText, Bell, Send, Bug, Waypoints, type LucideIcon } from 'lucide-react'
 import { useCallback, useMemo } from 'react'
@@ -11,6 +11,7 @@ import { toast } from 'sonner'
 import { NavMain } from './NavMain'
 import { NavSecondary } from './NavSecondary'
 import { Tenant } from './Tenant'
+import { env } from '@/infra/env'
 
 const sidebar_nav: {
   navMain: {
@@ -73,7 +74,7 @@ export function AppSidebar() {
   const logout = useLogout()
 
   const handleLogout = useCallback(() => {
-    const cookie = Cookies.get(AUTH_COOKIE)
+    const cookie = Cookies.get(env.AUTH_COOKIE)
     if (cookie) {
       const decoded = decode(cookie)
       console.log('cookies', decoded)
