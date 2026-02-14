@@ -1,5 +1,5 @@
-import { clnapi } from '@/infra/common/axios'
+import { api } from '@/infra/common/axios'
 
 export const getPost = async () => {
-  return clnapi.get('/carrers')
+  return api.get('/carrers')
 }

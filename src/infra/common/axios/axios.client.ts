@@ -14,11 +14,18 @@ function authRequestInterceptor(config: InternalAxiosRequestConfig): InternalAxi
 
   config.withCredentials = true
 
+  // routes fetching external ROUTE
   const public_routes = [paths.auth.login.path, paths.auth.register.path, '/auth/me']
-  if (config.url && public_routes.includes(config.url)) {
+  if (config.url && !public_routes.includes(config.url)) {
     const jwt = Cookies.get(env.AUTH_COOKIE)
     config.headers.Authorization = `Bearer ${jwt}`
+  } else {
+    // mock to the external url
+    if (import.meta.env.MODE === 'development') {
+      config.baseURL = 'http://localhost:3001'
+    }
   }
+
   return config
 }
 

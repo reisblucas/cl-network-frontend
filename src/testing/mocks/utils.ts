@@ -10,6 +10,8 @@ export const networkDelay = () => {
   return delay(delayTime)
 }
 
+export const mockBaseUrl = env.MOCK_API_URL
+
 export const encode = (obj: any) => {
   const btoa =
     typeof window === 'undefined' ? (str: string) => Buffer.from(str, 'binary').toString('base64') : window.btoa
