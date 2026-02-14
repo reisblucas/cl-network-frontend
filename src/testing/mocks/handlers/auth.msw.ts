@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { env } from '@/infra/env'
 import { http, HttpResponse } from 'msw'
-import { AUTH_COOKIE, authenticate, hash, networkDelay, requireAuth } from '../utils'
+import { AUTH_COOKIE, authenticate, hash, networkDelay, requireAuth, wrapBackendSuccessResponse } from '../utils'
 import { registerInputSchema, type LoginInput, type UserRegister } from '@/auth'
 import Cookies from 'js-cookie'
 import { db, persistDb } from '../db'
@@ -18,7 +18,7 @@ async function loginHandler({ request }: { request: Request }) {
 
     Cookies.set(AUTH_COOKIE, result.jwt)
 
-    return HttpResponse.json(result, {
+    return HttpResponse.json(wrapBackendSuccessResponse({ data: result }), {
       status: 200,
       // with a real API servier, the token cookie should also be Secure and HttpOnly
       headers: { 'Set-Cookie': `${AUTH_COOKIE}=${result.jwt}; Path=/` }
@@ -42,7 +42,7 @@ export const authHandlers = [
     // TODO: add simulation jwt expired
     try {
       const { user } = requireAuth(cookies)
-      return HttpResponse.json({ data: user })
+      return HttpResponse.json(wrapBackendSuccessResponse({ data: user }))
     } catch (error: any) {
       return HttpResponse.json({ error: error?.message || 'Server Error' }, { status: error?.cause || 500 })
     }
@@ -80,8 +80,7 @@ export const authHandlers = [
         password: await hash(password)
       })
       await persistDb('user')
-      await loginHandler({ request })
-      return HttpResponse.json({ message: 'User registered successfully' }, { status: 201 })
+      return await loginHandler({ request })
     } catch (error: any) {
       return HttpResponse.json({ message: error?.message || 'Server Error' }, { status: error?.cause || 500 })
     }

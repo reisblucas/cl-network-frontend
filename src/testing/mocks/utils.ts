@@ -113,3 +113,13 @@ export function requireAdmin(user: any) {
     throw Error('Unauthorized')
   }
 }
+
+export function wrapBackendSuccessResponse<T>({ data, metadata }: { data: T; metadata?: Record<string, any> }) {
+  if (metadata) {
+    return { data, metadata }
+  }
+
+  return {
+    data
+  }
+}

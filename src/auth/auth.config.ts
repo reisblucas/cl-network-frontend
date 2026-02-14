@@ -8,7 +8,7 @@ const authConfig = {
   userFn: async () => {
     try {
       const response = await getUser()
-      return response
+      return response.data
     } catch (err: any) {
       console.error('Auth User:', err.message)
       /**
@@ -20,17 +20,14 @@ const authConfig = {
   },
   loginFn: async (data: LoginInput) => {
     const response = await loginWithEmailAndPassword(data)
-    return response.user
+    return response.data.user
   },
   // TODO: register api simulation later
   registerFn: async (data: RegisterInput) => {
     const response = await registerWithEmailAndPassword(data)
-    return response.user
+    return response.data.user
   },
-  logoutFn: async (id: string) => {
-    const response = await logout(id)
-    return response
-  }
+  logoutFn: async () => await logout()
 }
 
 export const { useLogin, useLogout, useUser, useRegister, AuthLoader } = configureAuth(authConfig)
