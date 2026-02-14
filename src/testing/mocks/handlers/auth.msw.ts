@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { env } from '@/infra/env'
 import { http, HttpResponse } from 'msw'
-import { AUTH_COOKIE, authenticate, hash, networkDelay, requireAuth, wrapBackendSuccessResponse } from '../utils'
+import { authenticate, hash, networkDelay, requireAuth, wrapBackendSuccessResponse } from '../utils'
 import { registerInputSchema, type LoginInput, type UserRegister } from '@/auth'
 import Cookies from 'js-cookie'
 import { db, persistDb } from '../db'
@@ -16,12 +16,12 @@ async function loginHandler({ request }: { request: Request }) {
     console.log('result', body_data)
     const result = authenticate(body_data)
 
-    Cookies.set(AUTH_COOKIE, result.jwt)
+    Cookies.set(env.AUTH_COOKIE, result.jwt)
 
     return HttpResponse.json(wrapBackendSuccessResponse({ data: result }), {
       status: 200,
       // with a real API servier, the token cookie should also be Secure and HttpOnly
-      headers: { 'Set-Cookie': `${AUTH_COOKIE}=${result.jwt}; Path=/` }
+      headers: { 'Set-Cookie': `${env.AUTH_COOKIE}=${result.jwt}; Path=/` }
     })
   } catch (error: any) {
     return HttpResponse.json(

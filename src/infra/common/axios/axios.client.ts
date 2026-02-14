@@ -1,5 +1,7 @@
 import axios, { type InternalAxiosRequestConfig } from 'axios'
 import { env } from '../../env'
+import { paths } from '@/infra/paths'
+import Cookies from 'js-cookie'
 
 export const api = axios.create({
   baseURL: env.API_URL
@@ -11,6 +13,12 @@ function authRequestInterceptor(config: InternalAxiosRequestConfig): InternalAxi
   }
 
   config.withCredentials = true
+
+  const public_routes = [paths.auth.login.path, paths.auth.register.path, '/auth/me']
+  if (config.url && public_routes.includes(config.url)) {
+    const jwt = Cookies.get(env.AUTH_COOKIE)
+    config.headers.Authorization = `Bearer ${jwt}`
+  }
   return config
 }
 
@@ -29,6 +37,13 @@ api.interceptors.response.use(
       // 1 flush data
       // 2 local storage, etc
       // 3 redirect to Landing Page/Unauthorized/Login
+      Cookies.remove(env.AUTH_COOKIE)
+
+      // dev & test environments
+      if (env.ENABLE_API_MOCKING) {
+        localStorage.removeItem('__msw-cookie-store__')
+      }
+
       // GlobalNavigate?.('/login')
       // toast.error('Session expired, please login again')
       // window.location.href = '/auth/login'
