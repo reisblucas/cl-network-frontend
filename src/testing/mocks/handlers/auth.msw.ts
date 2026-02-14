@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { env } from '@/infra/env'
 import { http, HttpResponse } from 'msw'
-import { authenticate, hash, networkDelay, requireAuth, wrapBackendSuccessResponse } from '../utils'
+import { authenticate, hash, mockBaseUrl, networkDelay, requireAuth, wrapBackendSuccessResponse } from '../utils'
 import { registerInputSchema, type LoginInput, type UserRegister } from '@/auth'
 import Cookies from 'js-cookie'
 import { db, persistDb } from '../db'
@@ -36,7 +36,7 @@ async function loginHandler({ request }: { request: Request }) {
 // end handlers
 
 export const authHandlers = [
-  http.get(`${env.API_URL}/auth/me`, async ({ cookies }) => {
+  http.get(`${mockBaseUrl}/auth/me`, async ({ cookies }) => {
     await networkDelay()
 
     // TODO: add simulation jwt expired
@@ -48,8 +48,8 @@ export const authHandlers = [
     }
   }),
 
-  http.post(`${env.API_URL}/auth/login`, loginHandler),
-  http.post(`${env.API_URL}/auth/register`, async ({ request }) => {
+  http.post(`${mockBaseUrl}/auth/login`, loginHandler),
+  http.post(`${mockBaseUrl}/auth/register`, async ({ request }) => {
     networkDelay()
 
     try {

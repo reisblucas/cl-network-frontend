@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { env } from '@/infra/env'
 import { http, HttpResponse } from 'msw'
-import { networkDelay } from '../utils'
+import { mockBaseUrl, networkDelay } from '../utils'
 import { db } from '../db'
 
 export const usersHandlers = [
@@ -11,7 +10,7 @@ export const usersHandlers = [
    * - register
    * - user update
    */
-  http.get(`${env.API_URL}/users/email`, async ({ request }) => {
+  http.get(`${mockBaseUrl}/users/email`, async ({ request }) => {
     await networkDelay()
 
     try {
