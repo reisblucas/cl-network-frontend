@@ -56,9 +56,6 @@ export function NavSecondary({ items, ...props }: NavSecondaryProps) {
   return (
     <SidebarGroup {...props}>
       <SidebarGroupContent>
-        <div className="mb-2 flex justify-end px-2">
-          <DarkModeToggle />
-        </div>
         <SidebarMenu>
           {items.map((item) => (
             <Dialog key={item.label} open={open[item.label]} onOpenChange={() => handleDialogOpenChange(item.label)}>
@@ -119,6 +116,12 @@ export function NavSecondary({ items, ...props }: NavSecondaryProps) {
               </SidebarMenuItem>
             </Dialog>
           ))}
+
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <DarkModeToggle />
+            </SidebarMenuButton>
+          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>
