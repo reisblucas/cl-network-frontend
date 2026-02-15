@@ -1,17 +1,17 @@
 import { useLogout } from '@/auth'
-import { Flex } from '@/components/common'
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from '@/components/ui/sidebar'
 import { paths } from '@/infra/paths'
 import { decode } from '@/testing/mocks/utils'
 import Cookies from 'js-cookie'
-import { LogOutIcon, Settings, User, FileText, Bell, Send, Bug, Waypoints, type LucideIcon } from 'lucide-react'
-import { useCallback, useMemo } from 'react'
+import { FileText, Bell, Send, Bug, type LucideIcon } from 'lucide-react'
+import { useCallback } from 'react'
 import { useNavigate } from 'react-router'
 import { toast } from 'sonner'
+import { env } from '@/infra/env'
 import { NavMain } from './NavMain'
 import { NavSecondary } from './NavSecondary'
+import { NavUser } from './NavUser'
 import { Tenant } from './Tenant'
-import { env } from '@/infra/env'
 
 const sidebar_nav: {
   navMain: {
@@ -77,7 +77,6 @@ export function AppSidebar() {
     const cookie = Cookies.get(env.AUTH_COOKIE)
     if (cookie) {
       const decoded = decode(cookie)
-      console.log('cookies', decoded)
 
       logout.mutate({ id: decoded.id })
       toast.success('Logged out successfully')
@@ -86,20 +85,6 @@ export function AppSidebar() {
       toast.error('No cookie found when trying to logout')
     }
   }, [logout, navigate])
-
-  const USER_OPTIONS: { label: string; icon: React.ElementType; action: () => void; disabled: boolean }[] = useMemo(
-    () => [
-      { label: 'Profile', icon: User, action: paths.app.profile.getHref, disabled: true },
-      {
-        label: 'Settings',
-        icon: Settings,
-        action: paths.app.settings.getHref,
-        disabled: true
-      },
-      { label: 'Logout', icon: LogOutIcon, action: handleLogout, disabled: false }
-    ],
-    [handleLogout]
-  )
 
   return (
     <Sidebar collapsible="icon">
@@ -113,7 +98,9 @@ export function AppSidebar() {
         <NavSecondary className="mt-auto" items={sidebar_nav.navSecondary} />
       </SidebarContent>
 
-      <SidebarFooter>{/* <NavUser user={users} /> */}</SidebarFooter>
+      <SidebarFooter>
+        <NavUser onLogout={handleLogout} />
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   )

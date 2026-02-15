@@ -2,6 +2,7 @@ import axios, { type InternalAxiosRequestConfig } from 'axios'
 import { env } from '../../env'
 import { paths } from '@/infra/paths'
 import Cookies from 'js-cookie'
+import { flushAuthData } from '@/auth'
 
 export const api = axios.create({
   baseURL: env.API_URL
@@ -44,12 +45,7 @@ api.interceptors.response.use(
       // 1 flush data
       // 2 local storage, etc
       // 3 redirect to Landing Page/Unauthorized/Login
-      Cookies.remove(env.AUTH_COOKIE)
-
-      // dev & test environments
-      if (env.ENABLE_API_MOCKING) {
-        localStorage.removeItem('__msw-cookie-store__')
-      }
+      flushAuthData()
 
       // GlobalNavigate?.('/login')
       // toast.error('Session expired, please login again')
