@@ -66,6 +66,10 @@ const createAppRouter = (queryClient: QueryClient) =>
         //   element: <ProfileRoute />
         // },
         {
+          path: paths.app.root.path,
+          element: <PostsRoute />
+        },
+        {
           path: paths.app.posts.path,
           element: <PostsRoute />
         }
