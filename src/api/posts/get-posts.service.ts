@@ -1,5 +1,5 @@
 import { api } from '@/infra/common/axios'
 
-export const getPost = async () => {
+export const getPosts = async () => {
   return api.get('/carrers')
 }

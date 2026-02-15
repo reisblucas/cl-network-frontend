@@ -4,7 +4,7 @@ import { create } from 'zustand'
 type Notification = {
   id: string
   title: string
-  description: string
+  description?: string
   type: 'success' | 'error' | 'warning' | 'info'
   duration?: number
   wasRendered?: boolean
