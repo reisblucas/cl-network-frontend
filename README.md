@@ -23,17 +23,18 @@
   - [x] error show/handlers
   - [x] debounce /users/email validation
   - [ ] api & services & api state
-    - [ ] auth
+    - [x] auth
       - [x] react-query-auth config
       - [x] /auth/login
       - [x] /auth/register
       - [x] /auth/me
-      - [ ] /auth/logout
+      - [x] /auth/logout
     - [ ] users
       - [x] /users/email
     - [ ] GET /posts
-    - [ ] DELETE /post/:postId
-    - [ ] PATCH /post/:postId
+    - [x] GET /posts/my-posts - BY USERNAME
+    - [x] DELETE /posts/:postId
+    - [x] PATCH /posts/:postId
 - [ ] Deploy
   - [ ] Vercel
 
