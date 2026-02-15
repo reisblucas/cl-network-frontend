@@ -14,6 +14,14 @@ const models = {
     bio: String,
     created_at: Date.now,
     updated_at: Date.now
+  },
+  post: {
+    id: primaryKey(nanoid),
+    username: String,
+    title: String,
+    content: String,
+    author_ip: String,
+    created_datetime: Date.now
   }
 }
 

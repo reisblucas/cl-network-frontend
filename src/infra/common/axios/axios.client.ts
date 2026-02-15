@@ -22,7 +22,7 @@ function authRequestInterceptor(config: InternalAxiosRequestConfig): InternalAxi
   } else {
     // mock to the external url
     if (import.meta.env.MODE === 'development') {
-      config.baseURL = 'http://localhost:3001'
+      config.baseURL = 'http://localhost:3001/api/v1'
     }
   }
 
