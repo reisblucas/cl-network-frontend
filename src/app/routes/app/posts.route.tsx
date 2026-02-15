@@ -162,8 +162,6 @@ export function PostsRoute() {
     [editFormDefaultValue]
   )
 
-  console.log('getPostsMutation.data', getPostsMutation.data?.data)
-
   return (
     <Flex className="@xl:max-w-3/5 w-full flex-col gap-4">
       <Head title="Posts feed" />
