@@ -19,7 +19,7 @@ export function PublicLayout({ children }: PublicLayoutProps) {
       <Flex className="relative flex justify-between border-b border-border p-2">
         <Flex className="items-center">
           {!isHome && (
-            <Button variant="default" className="w-24 cursor-pointer" onClick={() => navigate(paths.home.getHref())}>
+            <Button variant="link" className="w-24 cursor-pointer" onClick={() => navigate(paths.home.getHref())}>
               <ArrowLeftCircle />
               Home
             </Button>
