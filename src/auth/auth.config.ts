@@ -2,6 +2,7 @@
 import { configureAuth } from 'react-query-auth'
 import type { LoginInput, RegisterInput } from './auth.dto'
 import { getUser, loginWithEmailAndPassword, registerWithEmailAndPassword, logout } from './auth.service'
+import { flushAuthData } from './auth.utils'
 
 const authConfig = {
   // TODO: user fetch api simulation late
@@ -27,7 +28,10 @@ const authConfig = {
     const response = await registerWithEmailAndPassword(data)
     return response.data.user
   },
-  logoutFn: async () => await logout()
+  logoutFn: async () => {
+    flushAuthData()
+    await logout()
+  }
 }
 
 export const { useLogin, useLogout, useUser, useRegister, AuthLoader } = configureAuth(authConfig)
