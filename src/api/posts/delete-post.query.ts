@@ -4,18 +4,20 @@ import type { MutationConfig } from '@/infra/common/react-query'
 
 type UseDeletePostQueryParams = {
   mutationConfig: MutationConfig<typeof deletePost>
-  postId: number
 }
 
-export function useDeletePostQuery({ mutationConfig = {}, postId }: UseDeletePostQueryParams) {
+export function useDeletePostQuery({ mutationConfig = {} }: UseDeletePostQueryParams) {
   const queryClient = useQueryClient()
-
   const { onSuccess, ...rest } = mutationConfig
 
   return useMutation({
-    mutationFn: deletePost,
+    mutationFn: ({ id }: { id: string }) => deletePost({ id }),
     onSuccess: (...args) => {
-      queryClient.invalidateQueries({ queryKey: ['posts', postId] })
+      console.log('args 0', args[0])
+      console.log('args 1', args[1])
+      console.log('args 2', args[2])
+      console.log('args 3', args[3])
+      // queryClient.invalidateQueries({ queryKey: ['posts', postId] })
       onSuccess?.(...args)
     },
     ...rest

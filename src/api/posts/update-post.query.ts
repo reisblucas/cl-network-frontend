@@ -10,7 +10,7 @@ export function useUpdatePostQuery({ mutationConfig = {} }: UseUpdatePostOptions
   const queryClient = useQueryClient()
 
   const { onSuccess, ...restConfig } = mutationConfig
-
+  console.log('mutationConfig', mutationConfig)
   return useMutation({
     mutationFn: updatePostService,
     onSuccess: (...args) => {

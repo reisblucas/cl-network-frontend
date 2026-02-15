@@ -2,7 +2,7 @@
 import { http, HttpResponse } from 'msw'
 import { mockBaseUrl, networkDelay, requireAuth, wrapBackendSuccessResponse } from '../utils'
 import type { CreatePostDto, UpdatePostDto } from '@/api/posts'
-import { db } from '../db'
+import { db, persistDb } from '../db'
 
 export const postsHandlers = [
   http.post(`${mockBaseUrl}/posts`, async ({ request, cookies }) => {
@@ -13,17 +13,16 @@ export const postsHandlers = [
       const post = db.post.create({
         ...bd
       })
-      console.log('post', post)
+      await persistDb('post')
 
       return HttpResponse.json(wrapBackendSuccessResponse({ data: post }), { status: 200 })
     } catch (error: any) {
       return HttpResponse.json({ error: error?.message || 'Server Error' }, { status: error?.cause || 500 })
     }
   }),
-  http.patch(`${mockBaseUrl}/posts/:postId`, async ({ request }) => {
+  http.patch(`${mockBaseUrl}/posts/:postId`, async ({ request, params }) => {
     try {
-      const url = new URL(request.url)
-      const postId = url.searchParams.get('postId')
+      const { postId } = params as { postId: string }
       if (!postId) {
         throw new Error('Post ID is required', { cause: 400 })
       }
@@ -37,23 +36,24 @@ export const postsHandlers = [
         throw new Error('Post not found', { cause: 404 })
       }
 
-      const bd = (await request.json()) as UpdatePostDto
+      const bd = (await request.json()) as Partial<UpdatePostDto>
       const updatedPost = db.post.update({
         where: { id: { equals: postId } },
         data: {
-          title: bd.title,
-          content: bd.content
+          ...bd
         }
       })
+      await persistDb('post')
       return HttpResponse.json(wrapBackendSuccessResponse({ data: updatedPost }), { status: 200 })
     } catch (error: any) {
       return HttpResponse.json({ error: error?.message || 'Server Error' }, { status: error?.cause || 500 })
     }
   }),
-  http.delete(`${mockBaseUrl}/posts/:postId`, async ({ request }) => {
+  http.delete(`${mockBaseUrl}/posts/:postId`, async ({ request, params, cookies }) => {
     try {
-      const url = new URL(request.url)
-      const postId = url.searchParams.get('postId')
+      requireAuth(cookies)
+
+      const { postId } = params as { postId: string }
       if (!postId) {
         throw new Error('Post ID is required', { cause: 400 })
       }
@@ -61,13 +61,14 @@ export const postsHandlers = [
       db.post.delete({
         where: { id: { equals: postId } }
       })
+      await persistDb('post')
 
       return HttpResponse.json(wrapBackendSuccessResponse({ data: null }), { status: 200 })
     } catch (error: any) {
       return HttpResponse.json({ error: error?.message || 'Server Error' }, { status: error?.cause || 500 })
     }
   }),
-  http.get(`${mockBaseUrl}/posts`, async ({ request, cookies }) => {
+  http.get(`${mockBaseUrl}/posts/my-posts/`, async ({ request, cookies }) => {
     try {
       const { user } = requireAuth(cookies)
       // const url = new URL(request.url)
@@ -107,7 +108,7 @@ export const postsHandlers = [
           // page, limit
         }
       }
-      return HttpResponse.json(wrapBackendSuccessResponse(response), { status: 200 })
+      return HttpResponse.json(wrapBackendSuccessResponse({ data: response, metadata: { count } }), { status: 200 })
     } catch (error: any) {
       return HttpResponse.json({ error: error?.message || 'Server Error' }, { status: error?.cause || 500 })
     }
