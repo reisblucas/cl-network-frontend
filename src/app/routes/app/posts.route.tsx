@@ -3,7 +3,6 @@ import {
   useCreatePostMutation,
   useDeletePostQuery,
   useGetPostByUserQuery,
-  useGetPostsQuery,
   useUpdatePostQuery,
   type CreatePostDto
 } from '@/api/posts'
@@ -146,7 +145,8 @@ export function PostsRoute() {
     }
   }
 
-  const handleCancelEdit = () => {
+  const handleCancelEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
     setIsEditing(false)
     setSelectedPostId('')
     // editPostForm.reset()
@@ -299,15 +299,7 @@ export function PostsRoute() {
                                 <p>Cancel</p>
                               </TooltipContent>
                               <TooltipTrigger asChild>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  onClick={(e) => {
-                                    e.preventDefault()
-                                    editPostForm.reset()
-                                    setIsEditing(false)
-                                  }}
-                                >
+                                <Button variant="ghost" size="icon" onClick={handleCancelEdit}>
                                   <X className="size-4" />
                                 </Button>
                               </TooltipTrigger>
