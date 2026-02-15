@@ -1,18 +1,8 @@
 import { useUser } from '@/auth'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar
-} from '@/components/ui/sidebar'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar'
 import { paths } from '@/infra/paths'
-import { ChevronsUpDown, LogOutIcon, Settings } from 'lucide-react'
+import { ChevronsUpDown, LogOutIcon, Settings, User } from 'lucide-react'
 import { useNavigate } from 'react-router'
 
 interface NavUserProps {
@@ -57,7 +47,11 @@ export function NavUser({ onLogout, profilePicture }: NavUserProps) {
             align="end"
             sideOffset={4}
           >
-            <DropdownMenuItem onClick={() => navigate(paths.app.settings.getHref())}>
+            <DropdownMenuItem onClick={() => navigate(paths.app.profile.getHref())} disabled>
+              <User className="size-4" />
+              Profile
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate(paths.app.settings.getHref())} disabled>
               <Settings className="size-4" />
               Settings
             </DropdownMenuItem>
