@@ -7,6 +7,7 @@ import { db, persistDb } from '../db'
 export const postsHandlers = [
   http.post(`${mockBaseUrl}/posts`, async ({ request, cookies }) => {
     await networkDelay()
+    requireAuth(cookies)
     const bd = (await request.json()) as CreatePostDto
 
     try {
@@ -49,7 +50,7 @@ export const postsHandlers = [
       return HttpResponse.json({ error: error?.message || 'Server Error' }, { status: error?.cause || 500 })
     }
   }),
-  http.delete(`${mockBaseUrl}/posts/:postId`, async ({ request, params, cookies }) => {
+  http.delete(`${mockBaseUrl}/posts/:postId`, async ({ params, cookies }) => {
     try {
       requireAuth(cookies)
 
@@ -68,7 +69,7 @@ export const postsHandlers = [
       return HttpResponse.json({ error: error?.message || 'Server Error' }, { status: error?.cause || 500 })
     }
   }),
-  http.get(`${mockBaseUrl}/posts/my-posts/`, async ({ request, cookies }) => {
+  http.get(`${mockBaseUrl}/posts/my-posts/`, async ({ cookies }) => {
     try {
       const { user } = requireAuth(cookies)
       // const url = new URL(request.url)
@@ -114,7 +115,7 @@ export const postsHandlers = [
     }
   }),
 
-  http.get(`${mockBaseUrl}/posts/:id`, async ({ request, cookies }) => {
+  http.get(`${mockBaseUrl}/posts/:id`, async ({ cookies }) => {
     try {
       const { user } = requireAuth(cookies)
       // const url = new URL(request.url)

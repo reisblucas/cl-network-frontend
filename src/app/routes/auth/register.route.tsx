@@ -103,7 +103,7 @@ export function RegisterRoute() {
   /**
    * Problem only occurs if we use it in memo or callback
    */
-  // eslint-disable-next-line react-hooks/incompatible-library
+
   const [debouncedEmail, setDebounced] = useDebounceValue(emailWatch, 500)
   const emailCheckQuery = useEmailCheckQuery({ email: debouncedEmail })
 
@@ -124,6 +124,7 @@ export function RegisterRoute() {
     }
 
     mutate()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clearErrors, debouncedEmail, setError])
 
   return (
