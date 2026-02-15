@@ -1,3 +1,4 @@
+import { DarkModeToggle } from '@/components/common/DarkModeToggle'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field'
@@ -55,6 +56,9 @@ export function NavSecondary({ items, ...props }: NavSecondaryProps) {
   return (
     <SidebarGroup {...props}>
       <SidebarGroupContent>
+        <div className="mb-2 flex justify-end px-2">
+          <DarkModeToggle />
+        </div>
         <SidebarMenu>
           {items.map((item) => (
             <Dialog key={item.label} open={open[item.label]} onOpenChange={() => handleDialogOpenChange(item.label)}>

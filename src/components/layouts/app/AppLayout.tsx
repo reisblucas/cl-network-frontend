@@ -1,5 +1,6 @@
-import { Flex } from '../../common'
+import { SidebarInset, SidebarTrigger } from '@/components/ui/sidebar'
 import { AppSidebar } from './sidebar'
+import { Flex } from '@/components/common'
 
 interface AppLayoutProps {
   children: React.ReactNode
@@ -7,10 +8,15 @@ interface AppLayoutProps {
 
 export function AppLayout({ children }: AppLayoutProps) {
   return (
-    <Flex className="flex-column w-full">
+    <>
       <AppSidebar />
-      {/* mobileHeader based on breakpoint? */}
-      <Flex className="@container p-2 justify-center">{children}</Flex>
-    </Flex>
+      <SidebarInset>
+        <header className="flex h-14 shrink-0 items-center gap-2 border-b border-border px-4">
+          <SidebarTrigger className="-ml-1" />
+          <span className="text-sm font-medium">People Network</span>
+        </header>
+        <Flex className="@container justify-center flex-1 p-4">{children}</Flex>
+      </SidebarInset>
+    </>
   )
 }
