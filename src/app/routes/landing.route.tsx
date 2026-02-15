@@ -20,7 +20,7 @@ export function LandingRoute() {
   return (
     <>
       <Head description="People Network — Connect, share, and grow with your community." />
-      <div className="relative flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center overflow-hidden bg-background px-6">
+      <div className="relative flex min-h-full flex-1 flex-col items-center justify-center overflow-hidden bg-background px-6">
         {/* Minimal network motif — floating nodes with rich colors */}
         <div className="pointer-events-none absolute inset-0" aria-hidden>
           <div className="absolute left-[15%] top-[25%] h-2 w-2 rounded-full bg-[oklch(0.75_0.12_45)]/40" />

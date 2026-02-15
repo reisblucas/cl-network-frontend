@@ -131,7 +131,7 @@ export function RegisterRoute() {
     <>
       <Head title="Register" />
 
-      <Flex className="justify-center items-center h-screen">
+      <Flex className="flex min-h-full flex-1 items-center justify-center">
         <Card className="w-full max-w-sm">
           <CardHeader className="relative">
             <CardTitle className="text-xl text-center">
