@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from 'react-router'
 import { Flex } from '../common'
 import { paths } from '@/infra/paths'
 import { Button } from '../ui/button'
+import { DarkModeToggle } from '../common/DarkModeToggle'
 import { ArrowLeftCircle } from 'lucide-react'
 
 type PublicLayoutProps = {
@@ -14,29 +15,22 @@ export function PublicLayout({ children }: PublicLayoutProps) {
   const location = useLocation()
   const isHome = location.pathname === paths.home.path
   return (
-    <Flex className=" h-full flex-col">
-      {/* header */}
-
-      <Flex className="flex-col  p-2 border-b border-b-zinc-400">
-        {!isHome && (
-          <Button
-            variant="default"
-            className={`w-24 cursor-pointer`}
-            disabled={isHome}
-            onClick={() => navigate(paths.home.getHref())}
-          >
-            <ArrowLeftCircle />
-            Home
+    <Flex className="h-full flex-col">
+      <Flex className="relative flex justify-between border-b border-border p-2">
+        <Flex className="items-center">
+          {!isHome && (
+            <Button variant="default" className="w-24 cursor-pointer" onClick={() => navigate(paths.home.getHref())}>
+              <ArrowLeftCircle />
+              Home
+            </Button>
+          )}
+        </Flex>
+        <Flex className="justify-end gap-2">
+          <Button variant="link" className="w-24 cursor-pointer" onClick={() => navigate(paths.auth.login.getHref())}>
+            Login
           </Button>
-        )}
-
-        <Button
-          variant="link"
-          className={`w-24 cursor-pointer self-end`}
-          onClick={() => navigate(paths.auth.login.getHref())}
-        >
-          Login
-        </Button>
+          <DarkModeToggle />
+        </Flex>
       </Flex>
 
       {children}
