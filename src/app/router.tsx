@@ -31,20 +31,27 @@ const createAppRouter = (queryClient: QueryClient) =>
       path: paths.home.path,
       element: (
         <PublicLayout title="Landing">
-          <LandingRoute />
+          <AppRoot />
         </PublicLayout>
       ),
-      lazy: () => import('./routes/landing.route').then(convert(queryClient))
-    },
-    {
-      path: paths.auth.login.path,
-      lazy: () => import('./routes/auth/login.route').then(convert(queryClient)),
-      element: <LoginRoute />
-    },
-    {
-      path: paths.auth.register.path,
-      lazy: () => import('./routes/auth/register.route').then(convert(queryClient)),
-      element: <RegisterRoute />
+      lazy: () => import('./routes/landing.route').then(convert(queryClient)),
+      children: [
+        {
+          path: paths.home.path,
+          lazy: () => import('./routes/landing.route').then(convert(queryClient)),
+          element: <LandingRoute />
+        },
+        {
+          path: paths.auth.login.path,
+          lazy: () => import('./routes/auth/login.route').then(convert(queryClient)),
+          element: <LoginRoute />
+        },
+        {
+          path: paths.auth.register.path,
+          lazy: () => import('./routes/auth/register.route').then(convert(queryClient)),
+          element: <RegisterRoute />
+        }
+      ]
     },
     {
       path: paths.app.root.path,
@@ -67,10 +74,12 @@ const createAppRouter = (queryClient: QueryClient) =>
         // },
         {
           path: paths.app.root.path,
+          lazy: () => import('./routes/app/posts.route').then(convert(queryClient)),
           element: <PostsRoute />
         },
         {
           path: paths.app.posts.path,
+          lazy: () => import('./routes/app/posts.route').then(convert(queryClient)),
           element: <PostsRoute />
         }
       ]

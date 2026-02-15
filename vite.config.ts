@@ -6,12 +6,11 @@ import path from 'path'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    react(),
-    //   {
-    //   babel: {
-    //     plugins: [['babel-plugin-react-compiler']]
-    //   }
-    // }
+    react({
+      babel: {
+        plugins: [['babel-plugin-react-compiler']]
+      }
+    }),
     tailwindcss()
   ],
   resolve: {
@@ -21,5 +20,21 @@ export default defineConfig({
   },
   server: {
     port: 3000
+  },
+  build: {
+    minify: 'terser',
+    sourcemap: true,
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true
+      },
+      mangle: {
+        toplevel: true
+      },
+      format: {
+        comments: false
+      }
+    }
   }
 })
