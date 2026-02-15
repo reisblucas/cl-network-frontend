@@ -18,3 +18,4 @@ export const getPostSchema = z
     )
   })
   .strict()
+export type GetPostsDto = z.infer<typeof getPostSchema>

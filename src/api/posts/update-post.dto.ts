@@ -6,3 +6,4 @@ export const updatePostSchema = z
     content: z.string().nonempty().nonoptional()
   })
   .strict()
+export type UpdatePostDto = z.infer<typeof updatePostSchema>
