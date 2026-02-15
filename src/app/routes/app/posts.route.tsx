@@ -162,6 +162,8 @@ export function PostsRoute() {
     [editFormDefaultValue]
   )
 
+  console.log('getPostsMutation.data', getPostsMutation.data?.data)
+
   return (
     <Flex className="@xl:max-w-3/5 w-full flex-col gap-4">
       <Head title="Posts feed" />
@@ -333,11 +335,6 @@ export function PostsRoute() {
                                 maxLength={createPostSchema.shape.content.maxLength ?? undefined}
                                 className="max-h-[20vh]"
                               />
-                              {editPostErrors.content && (
-                                <span className="text-xs inline-block text-red-500">
-                                  {editPostErrors.content.message}
-                                </span>
-                              )}
 
                               <InputGroupAddon align="block-end" className="flex flex-end">
                                 <Flex className="w-full justify-end">
@@ -348,6 +345,11 @@ export function PostsRoute() {
                                 </Flex>
                               </InputGroupAddon>
                             </InputGroup>
+                            {editPostErrors.content && (
+                              <span className="text-xs inline-block text-red-500">
+                                {editPostErrors.content.message}
+                              </span>
+                            )}
                           </Field>
                         </FieldGroup>
                       </CardContent>

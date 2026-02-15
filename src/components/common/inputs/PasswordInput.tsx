@@ -14,7 +14,7 @@ interface PasswordInputProps<T extends FieldValues> {
 }
 
 export function PasswordInput<T extends FieldValues>({
-  id = 'password',
+  id = 'password' as Path<T>,
   label = 'Password',
   placeholder = 'Type your password here',
   className
