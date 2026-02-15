@@ -7,32 +7,12 @@ import Cookies from 'js-cookie'
 import { db, persistDb } from '../db'
 
 // controllers, services, db layers
-async function loginHandler({ request }: { request: Request }) {
-  await networkDelay()
-
-  // add db simulation
-  try {
-    const body_data = (await request.json()) as LoginInput
-    console.log('result', body_data)
-    const result = authenticate(body_data)
-
-    Cookies.set(env.AUTH_COOKIE, result.jwt)
-
-    return HttpResponse.json(wrapBackendSuccessResponse({ data: result }), {
-      status: 200,
-      // with a real API servier, the token cookie should also be Secure and HttpOnly
-      headers: { 'Set-Cookie': `${env.AUTH_COOKIE}=${result.jwt}; Path=/` }
-    })
-  } catch (error: any) {
-    return HttpResponse.json(
-      {
-        status: error?.cause || 500,
-        message: error?.message || 'Server Error'
-      },
-      { status: error?.cause || 500 }
-    )
-  }
+function loginLogic({ login, password }: LoginInput) {
+  const result = authenticate({ login, password })
+  Cookies.set(env.AUTH_COOKIE, result.jwt)
+  return result
 }
+
 // end handlers
 
 export const authHandlers = [
@@ -48,7 +28,29 @@ export const authHandlers = [
     }
   }),
 
-  http.post(`${mockBaseUrl}/auth/login`, loginHandler),
+  http.post(`${mockBaseUrl}/auth/login`, async function loginHandler({ request }: { request: Request }) {
+    await networkDelay()
+
+    // add db simulation
+    try {
+      const body_data = (await request.json()) as LoginInput
+      const result = loginLogic(body_data)
+
+      return HttpResponse.json(wrapBackendSuccessResponse({ data: result }), {
+        status: 200,
+        // with a real API servier, the token cookie should also be Secure and HttpOnly
+        headers: { 'Set-Cookie': `${env.AUTH_COOKIE}=${result.jwt}; Path=/` }
+      })
+    } catch (error: any) {
+      return HttpResponse.json(
+        {
+          status: error?.cause || 500,
+          message: error?.message || 'Server Error'
+        },
+        { status: error?.cause || 500 }
+      )
+    }
+  }),
   http.post(`${mockBaseUrl}/auth/register`, async ({ request }) => {
     networkDelay()
 
@@ -80,7 +82,10 @@ export const authHandlers = [
         password: await hash(password)
       })
       await persistDb('user')
-      return await loginHandler({ request })
+
+      // login
+      const result = loginLogic({ login: bd_parsed.email, password })
+      return HttpResponse.json(wrapBackendSuccessResponse({ data: result }))
     } catch (error: any) {
       return HttpResponse.json({ message: error?.message || 'Server Error' }, { status: error?.cause || 500 })
     }

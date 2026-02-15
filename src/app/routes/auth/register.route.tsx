@@ -110,13 +110,12 @@ export function RegisterRoute() {
   useEffect(() => {
     const mutate = async () => {
       if (debouncedEmail) {
-        const params = new URLSearchParams()
-        params.set('exists', debouncedEmail)
-        console.log('EMAIL CHECK QUERY', emailCheckQuery)
+        const mutated = await emailCheckQuery.refetch()
 
-        if (emailCheckQuery.isError) return
-        if (emailCheckQuery.data) {
-          setError('email', { message: 'cu' })
+        if (mutated.isError) return
+        if (mutated.data) {
+          console.log('EMAIL ALREADY EXISTS')
+          setError('email', { message: 'Email already exists' })
         } else {
           clearErrors('email')
         }
@@ -126,6 +125,7 @@ export function RegisterRoute() {
     mutate()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clearErrors, debouncedEmail, setError])
+  console.log('errors', errors)
 
   return (
     <>
