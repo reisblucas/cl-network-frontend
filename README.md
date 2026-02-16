@@ -42,6 +42,7 @@
     - [x] PATCH /posts/:postId
 - [x] Deploy
   - [x] Vercel
+  - [x] MSW in production as example
 
 ---
 
