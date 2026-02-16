@@ -41,7 +41,7 @@ const registerPasswordSchema = z
 
 export const loginInputSchema = z
   .object({
-    login: z.string().min(3, 'Inform your email or username'),
+    login: z.string().min(3, 'Inform your email or username').trim(),
     password: BASE_PASSWORD_SCHEMA
   })
   .strict()
@@ -49,8 +49,9 @@ export const loginInputSchema = z
     const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.login)
     if (!isEmail) {
       // validate
-      const isInvalidUsername = HAS_SPECIAL_CHARACTER_REGEX.test(data.login) // if not have  special character, it is valid
+      const isInvalidUsername = SPECIAL_CHARACTERS_NOT_ALLOWED.test(data.login) // if not have  special character, it is valid
 
+      console.log('isInvalidUsername', isInvalidUsername)
       if (isInvalidUsername) {
         ctx.addIssue({
           path: ['login'],
