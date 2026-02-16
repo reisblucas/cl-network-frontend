@@ -19,7 +19,7 @@ export function LandingRoute() {
 
   return (
     <>
-      <Head description="People Network — Connect, share, and grow with your community." />
+      <Head description="CL Network — Connect, share, and grow with your community." />
       <div className="relative flex min-h-full flex-1 flex-col items-center justify-center overflow-hidden bg-background px-6">
         {/* Minimal network motif — floating nodes with rich colors */}
         <div className="pointer-events-none absolute inset-0" aria-hidden>
@@ -31,9 +31,7 @@ export function LandingRoute() {
         </div>
 
         <main className="relative z-10 flex max-w-2xl flex-col items-center text-center">
-          <span className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
-            People Network
-          </span>
+          <span className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">CL Network</span>
           <h1 className="text-5xl font-semibold tracking-tight text-foreground sm:text-6xl md:text-7xl">
             Where people
             <br />
